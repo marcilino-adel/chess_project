@@ -57,6 +57,8 @@ class Rook {
     /*
     moves:
         moves any number of square in the vertical and horizontal axis
+    eats:
+        same as his movement
     special:
         castle
      */
