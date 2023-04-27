@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class ChessPiece {
+    // we are modelling
     protected final int iconSize = 50;
     public Color color;
     public Coord position;
