@@ -14,8 +14,7 @@ public class GameEngine extends JPanel {
     public static JPanel playingBoard;
     public static ChessSquare[][] squares;
 
-    public GameEngine() {
-        squares=new ChessSquare[8][8];
+    public GameEngine() { squares=new ChessSquare[8][8];
         playingBoard = new JPanel(new GridLayout(8, 8));
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[i].length; j++) {
@@ -35,6 +34,7 @@ public class GameEngine extends JPanel {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
 
     }
 
