@@ -33,11 +33,14 @@ public class gameEngine extends JFrame {
                 }
                 squares[i][j].piece = new Rook(Color.black, j, i);
                 playingBoard.add(squares[i][j]);
+                squares[i][j].piece=new Rook(Color.white,j,i);
             }
-        }
+            }
+
 
         add(playingBoard);
         setVisible(true);
+
     }
 
     public static void main(String[] args) {

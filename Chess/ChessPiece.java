@@ -37,9 +37,9 @@ class Pawn extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackPawn.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackPawn.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whitePawn.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whitePawn.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
@@ -59,9 +59,9 @@ class Rook extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackRook.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackRook.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whiteRook.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whiteRook.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
@@ -81,9 +81,9 @@ class Knight extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackKnight.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackKnight.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whiteKnight.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whiteKnight.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
@@ -103,9 +103,9 @@ class Bishop extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackBishop.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackBishop.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whiteBishop.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whiteBishop.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
@@ -125,9 +125,9 @@ class Queen extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackQueen.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackQueen.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whiteQueen.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whiteQueen.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
@@ -148,9 +148,9 @@ class King extends ChessPiece {
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/blackKing.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/blackKing.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             } else {
-                return new ImageIcon(ImageIO.read(new File("/Media/Icons/whiteKing.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
+                return new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/whiteKing.png")).getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
             }
         } catch (IOException exception) {
             return null;
