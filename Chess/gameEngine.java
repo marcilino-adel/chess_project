@@ -10,6 +10,7 @@ public class gameEngine extends JFrame {
     public static ChessPiece selectedPiece;
     public static ArrayList<Coord> legalMoves;
     public static JPanel playingBoard;
+    public static JPanel informationBoard;
     public static ChessSquare[][] squares = new ChessSquare[boardSize][boardSize];
 
     public gameEngine() {
@@ -25,7 +26,7 @@ public class gameEngine extends JFrame {
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[i].length; j++) {
                 squares[i][j] = new ChessSquare();
-                if ((i + j) % 2 == 0) {
+                if ((i + j) % 2 != 0) {
                     squares[i][j].setBackground(Color.WHITE);
                 } else {
                     squares[i][j].setBackground(Color.BLACK);
