@@ -1,4 +1,16 @@
 package Chess;
 
-public class MainWindow {
+import javax.swing.*;
+
+import static Chess.GameEngine.playingBoard;
+
+public class MainWindow    {
+
+
+    public static void main(String[] args){
+
+        new GameEngine();
+
+    }
+
 }
