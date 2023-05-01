@@ -15,6 +15,14 @@ public class GameEngine extends JPanel {
     public static ChessSquare[][] squares;
 
     public GameEngine() {
-
+        for (int i = 0; i<8; i++) {
+            for (int j=0 ; j<8;j++)
+            squares [i][j] =new ChessSquare();
+        }
+        for (int i = 0; i<8; i++) {
+            for (int j=0 ; j<8;j++)
+                squares [i][j].setSize(20,10);
+        }
+              squares[0][0].setVisible(true);
     }
 }
