@@ -13,7 +13,7 @@ public class ChessSquare extends JButton implements ActionListener {
 
     public ChessSquare(int x, int y) {
         this.position = new Coord(x, y);
-        this.addActionListener(this);
+       this.addActionListener(this);
     }
 
     public ImageIcon getIcon() {
@@ -24,10 +24,12 @@ public class ChessSquare extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (selectedPiece == null) {
-            if (this.piece != null) selectedPiece = this.piece;
+            if (this.piece != null)
+            selectedPiece = this.piece;
             return;
         }
         squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
+        // add this.piece to an array of eaten pieces
         this.piece = selectedPiece;
         selectedPiece.position = this.position;
         selectedPiece = null;

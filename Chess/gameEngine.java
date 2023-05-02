@@ -63,12 +63,11 @@ public class gameEngine extends JFrame {
                    squares[row][col].piece=new Queen(Color.white,col,row);
 
             }
-            }
+        }
 
 
         add(playingBoard);
         setVisible(true);
-
     }
 
     public static void main(String[] args) {
