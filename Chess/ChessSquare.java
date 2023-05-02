@@ -1,15 +1,20 @@
 package Chess;
 
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ChessSquare extends JButton implements MouseListener {
+import static Chess.gameEngine.*;
+
+public class ChessSquare extends JButton implements ActionListener {
     // Ibrahim was here 8:30 pm
     public ChessPiece piece;
     public Coord position;
 
-    public ChessSquare() {}
+    public ChessSquare(int x, int y) {
+        this.position = new Coord(x, y);
+        this.addActionListener(this);
+    }
 
     public ImageIcon getIcon() {
         if (this.piece != null) return this.piece.getPieceIcon();
@@ -17,27 +22,16 @@ public class ChessSquare extends JButton implements MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+    public void actionPerformed(ActionEvent e) {
+        if (selectedPiece == null) {
+            if (this.piece != null) selectedPiece = this.piece;
+            return;
+        }
+        squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
+        this.piece = selectedPiece;
+        selectedPiece.position = this.position;
+        selectedPiece = null;
+        playingBoard.revalidate();
+        playingBoard.repaint();
     }
 }

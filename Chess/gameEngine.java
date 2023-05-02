@@ -2,6 +2,7 @@ package Chess;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class gameEngine extends JFrame {
@@ -22,42 +23,44 @@ public class gameEngine extends JFrame {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ignored) {}
 
-        playingBoard = new JPanel(new GridLayout(boardSize, boardSize));
-        for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[i].length; j++) {
-                squares[i][j] = new ChessSquare();
-                if ((i + j) % 2 != 0) {
-                    squares[i][j].setBackground(Color.WHITE);
+        GridLayout layout = new GridLayout(boardSize, boardSize);
+        playingBoard = new JPanel(layout);
+
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                squares[row][col] = new ChessSquare(col, row);
+                if ((row + col) % 2 != 0) {
+                    squares[row][col].setBackground(Color.black);
                 } else {
-                    squares[i][j].setBackground(Color.BLACK);
+                    squares[row][col].setBackground(Color.white);
                 }
-                playingBoard.add(squares[i][j]);
-               if(i==1)
-                   squares[i][j].piece=new Pawn(Color.white,j,i);
-               else if (i==6) {
-                   squares[i][j].piece=new Pawn(Color.black,j,i);
+                playingBoard.add(squares[row][col]);
+               if(row==1)
+                   squares[row][col].piece=new Pawn(Color.black,col,row);
+               else if (row==6) {
+                   squares[row][col].piece=new Pawn(Color.white,col,row);
                }
-               else if(i==0&&(j==0||j==7))
-                   squares[i][j].piece=new Rook(Color.white,i,j);
-               else if(i==0&&(j==1||j==6))
-                   squares[i][j].piece=new Knight(Color.white,i,j);
-               else if(i==0&&(j==2||j==5))
-                   squares[i][j].piece=new Bishop(Color.white,i,j);
-               else if(i==0&&j==3)
-                   squares[i][j].piece=new King(Color.white,i,j);
-               else if(i==0&&j==4)
-                   squares[i][j].piece=new Queen(Color.white,i,j);
+               else if(row==0&&(col==0||col==7))
+                   squares[row][col].piece=new Rook(Color.black,col,row);
+               else if(row==0&&(col==1||col==6))
+                   squares[row][col].piece=new Knight(Color.black,col,row);
+               else if(row==0&&(col==2||col==5))
+                   squares[row][col].piece=new Bishop(Color.black,col,row);
+               else if(row==0&&col==4)
+                   squares[row][col].piece=new King(Color.black,col,row);
+               else if(row==0&&col==3)
+                   squares[row][col].piece=new Queen(Color.black,col,row);
                    //Set the second half
-               else if(i==7&&(j==0||j==7))
-                   squares[i][j].piece=new Rook(Color.black,i,j);
-               else if(i==7&&(j==1||j==6))
-                   squares[i][j].piece=new Knight(Color.black,i,j);
-               else if(i==7&&(j==2||j==5))
-                   squares[i][j].piece=new Bishop(Color.black,i,j);
-               else if(i==7&&j==3)
-                   squares[i][j].piece=new King(Color.black,i,j);
-               else if(i==7&&j==4)
-                   squares[i][j].piece=new Queen(Color.black,i,j);
+               else if(row==7&&(col==0||col==7))
+                   squares[row][col].piece=new Rook(Color.white,col,row);
+               else if(row==7&&(col==1||col==6))
+                       squares[row][col].piece=new Knight(Color.white,col,row);
+               else if(row==7&&(col==2||col==5))
+                   squares[row][col].piece=new Bishop(Color.white,col,row);
+               else if(row==7&&col==4)
+                   squares[row][col].piece=new King(Color.white,col,row);
+               else if(row==7&&col==3)
+                   squares[row][col].piece=new Queen(Color.white,col,row);
 
             }
             }
