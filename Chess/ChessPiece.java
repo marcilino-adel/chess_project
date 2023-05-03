@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class ChessPiece {
-    // we are modelling
     protected final int iconSize = 50;
     public Color color;
     public Coord position;
@@ -20,6 +19,7 @@ public abstract class ChessPiece {
     }
 
     public abstract ArrayList<Coord> availableMoves();
+
     public abstract ImageIcon getPieceIcon();
 }
 
@@ -54,7 +54,19 @@ class Rook extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        return null;
+        ArrayList<Coord> moves = new ArrayList<>();
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        for (int i = 0; i < dx.length; i++) {
+            int currX = this.position.x;
+            int currY = this.position.y;
+            while (currY <= 7 && currY >= 0 && currX <= 7 && currX >= 0) {
+                currX += dx[i];
+                currY += dy[i];
+                moves.add(new Coord(currX, currY));
+            }
+        }
+        return moves;
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -98,6 +110,8 @@ class Bishop extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
+
+
         return null;
     }
     public ImageIcon getPieceIcon() {

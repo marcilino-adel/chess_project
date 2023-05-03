@@ -26,9 +26,28 @@ public class ChessSquare extends JButton implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (selectedPiece == null) {
             if (this.piece != null)
-                if (this.piece.color == currentPlayer)
+                if (this.piece.color == currentPlayer) {
                     selectedPiece = this.piece;
+                    // remove this condition when all implementations of the availableMoves method are done
+                    if (selectedPiece.getClass() == Rook) {
+                        legalMoves = selectedPiece.availableMoves();
+                    }
+                }
                 else shakeButton();
+            return;
+        }
+        boolean found = false;
+        // remove this condition as well when all implementations are done
+        if (selectedPiece.getClass() == Rook.class) {
+            for (Coord move : legalMoves) {
+                if (move.x == this.position.x && move.y == this.position.y) {
+                    found = true;
+                    break;
+                }
+            }
+        } else found = true;
+        if (!found) {
+            squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
             return;
         }
         squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
