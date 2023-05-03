@@ -1,6 +1,7 @@
 package Chess;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,7 +26,9 @@ public class ChessSquare extends JButton implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (selectedPiece == null) {
             if (this.piece != null)
-            selectedPiece = this.piece;
+                if (this.piece.color == currentPlayer)
+                    selectedPiece = this.piece;
+                else shakeButton();
             return;
         }
         squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
@@ -33,7 +36,29 @@ public class ChessSquare extends JButton implements ActionListener {
         this.piece = selectedPiece;
         selectedPiece.position = this.position;
         selectedPiece = null;
+        currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
         playingBoard.revalidate();
         playingBoard.repaint();
+    }
+
+    public void shakeButton() {
+        int delay = 50; // delay in milliseconds
+        int numShakes = 7;
+        int dx = 3;
+        Timer timer = new Timer(delay, new ActionListener() {
+            int count = 0;
+            int sign = 1;
+            final int originalX = getLocation().x;
+            public void actionPerformed(ActionEvent e) {
+                setLocation(originalX + sign * dx, getLocation().y);
+                count++;
+                if (count == numShakes) {
+                    ((Timer) e.getSource()).stop();
+                    setLocation(originalX, getLocation().y);
+                }
+                sign = -sign;
+            }
+        });
+        timer.start();
     }
 }
