@@ -110,9 +110,19 @@ class Bishop extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-
-
-        return null;
+        ArrayList<Coord> moves = new ArrayList<>();
+        int[] dx={1,-1,1,-1};
+        int[] dy={1,1,-1,-1};
+        for (int i=0;i<=dx.length;i++){
+            int newx=this.position.x;
+            int newy=this.position.y;
+            while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
+                newx+=dx[i];
+                newy+=dy[i];
+                moves.add(new Coord(newx,newy));
+            }
+        }
+        return moves;
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -134,6 +144,8 @@ class Queen extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
+
+
         return null;
     }
     public ImageIcon getPieceIcon() {
