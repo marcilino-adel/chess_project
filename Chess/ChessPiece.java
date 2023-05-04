@@ -58,12 +58,12 @@ class Rook extends ChessPiece {
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
         for (int i = 0; i < dx.length; i++) {
-            int currX = this.position.x;
-            int currY = this.position.y;
-            while (currY <= 7 && currY >= 0 && currX <= 7 && currX >= 0) {
-                currX += dx[i];
-                currY += dy[i];
-                moves.add(new Coord(currX, currY));
+            int newX = this.position.x + dx[i];
+            int newY = this.position.y + dy[i];
+            while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0) {
+                moves.add(new Coord(newX, newY));
+                newX += dx[i];
+                newY += dy[i];
             }
         }
         return moves;
@@ -111,15 +111,15 @@ class Bishop extends ChessPiece {
     @Override
     public ArrayList<Coord> availableMoves() {
         ArrayList<Coord> moves = new ArrayList<>();
-        int[] dx={1,-1,1,-1};
-        int[] dy={1,1,-1,-1};
-        for (int i=0;i<=dx.length;i++){
-            int newx=this.position.x;
-            int newy=this.position.y;
+        int[] dx = {1, -1, 1, -1};
+        int[] dy = {1, 1, -1, -1};
+        for (int i = 0; i < dx.length; i++){
+            int newx = this.position.x + dx[i];
+            int newy = this.position.y + dy[i];
             while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
-                newx+=dx[i];
-                newy+=dy[i];
-                moves.add(new Coord(newx,newy));
+                moves.add(new Coord(newx, newy));
+                newx += dx[i];
+                newy += dy[i];
             }
         }
         return moves;

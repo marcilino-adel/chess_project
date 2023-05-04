@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import static Chess.gameEngine.*;
 
 public class ChessSquare extends JButton implements ActionListener {
-    // Ibrahim was here 8:30 pm
     public ChessPiece piece;
     public Coord position;
 
@@ -25,32 +24,44 @@ public class ChessSquare extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (selectedPiece == null) {
-            if (this.piece != null)
-                if (this.piece.color == currentPlayer) {
-                    selectedPiece = this.piece;
-                    // remove this condition when all implementations of the availableMoves method are done
-                    if (selectedPiece.getClass() == Rook.class) {
-                        legalMoves = selectedPiece.availableMoves();
-                    }
-                }
-                else shakeButton();
-            return;
-        }
-        boolean found = false;
-        // remove this condition as well when all implementations are done
-        if (selectedPiece.getClass() == Rook.class) {
-            for (Coord move : legalMoves) {
-                if (move.x == this.position.x && move.y == this.position.y) {
-                    found = true;
-                    break;
+            if (this.piece != null) {
+                selectedPiece = this.piece;
+                legalMoves = selectedPiece.availableMoves();
+                for (Coord move: legalMoves) {
+                    squares[move.y][move.x].setBackground(Color.green);
                 }
             }
-        } else found = true;
+            return;
+        }
+        if (this.piece != null) {
+            if (this.piece.color == currentPlayer) {
+                selectedPiece = this.piece;
+                for (Coord move: legalMoves) {
+                    squares[move.y][move.x].setBackground(((move.x + move.y) % 2 != 0 ? Color.black : Color.white));
+                }
+                legalMoves = selectedPiece.availableMoves();
+                for (Coord move : legalMoves) {
+                    squares[move.y][move.x].setBackground(Color.green);
+                }
+                return;
+            }
+        };
+        boolean found = false;
+        for (Coord move : legalMoves) {
+            if (move.x == this.position.x && move.y == this.position.y) {
+                found = true;
+                break;
+            }
+            }
         if (!found) {
             squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
             return;
         }
         squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
+        for (Coord move: legalMoves) {
+            squares[move.y][move.x].setBackground(((move.x + move.y) % 2 != 0 ? Color.black : Color.white));
+        }
+        legalMoves = null;
         // add this.piece to an array of eaten pieces
         this.piece = selectedPiece;
         selectedPiece.position = this.position;
