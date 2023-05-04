@@ -144,9 +144,19 @@ class Queen extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-
-
-        return null;
+        ArrayList<Coord> moves = new ArrayList<>();
+        int[] dx={0,0,1,-1,1,1,-1,-1};
+        int[] dy={1,-1,0,0,1,-1,1,-1};
+        for (int i=0;i<=dx.length;i++){
+            int newx=this.position.x;
+            int newy=this.position.y;
+            while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
+                moves.add(new Coord(newx,newy));
+                newx+=dx[i];
+                newy+=dy[i];
+            }
+        }
+        return moves;
     }
     public ImageIcon getPieceIcon() {
         try {
