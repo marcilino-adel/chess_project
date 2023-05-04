@@ -29,7 +29,7 @@ public class ChessSquare extends JButton implements ActionListener {
                 if (this.piece.color == currentPlayer) {
                     selectedPiece = this.piece;
                     // remove this condition when all implementations of the availableMoves method are done
-                    if (selectedPiece.getClass() == Rook) {
+                    if (selectedPiece.getClass() == Rook.class) {
                         legalMoves = selectedPiece.availableMoves();
                     }
                 }
