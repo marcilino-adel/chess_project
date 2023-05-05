@@ -147,7 +147,7 @@ class Queen extends ChessPiece {
         ArrayList<Coord> moves = new ArrayList<>();
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
-        for (int i = 0;i < dx.length; i++){
+        for (int i = 0; i < dx.length; i++) {
             int newx = this.position.x + dx[i];
             int newy = this.position.y + dy[i];
             while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
