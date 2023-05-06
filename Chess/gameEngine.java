@@ -73,4 +73,30 @@ public class gameEngine extends JFrame {
     public static void main(String[] args) {
         new gameEngine();
     }
+
+    public static void movePiece(Coord initPos, Coord finalPos) {
+        squares[finalPos.y][finalPos.x].piece = selectedPiece;
+        selectedPiece.position = finalPos;
+        squares[initPos.y][initPos.x].piece = null;
+        deColorAvailableMoves();
+        selectedPiece = null;
+        currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
+    }
+
+    public static void colorAvailableMoves() {
+        // modify further to color red or green based on the state of the board
+        for (Coord move: legalMoves) {
+            squares[move.y][move.x].setBackground(Color.green);
+        }
+        playingBoard.repaint();
+        playingBoard.revalidate();
+    }
+    public static void deColorAvailableMoves() {
+        for (Coord move: legalMoves) {
+            squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
+        }
+        legalMoves = null;
+        playingBoard.repaint();
+        playingBoard.revalidate();
+    }
 }

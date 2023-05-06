@@ -27,48 +27,31 @@ public class ChessSquare extends JButton implements ActionListener {
             if (this.piece != null) {
                 selectedPiece = this.piece;
                 legalMoves = selectedPiece.availableMoves();
-                for (Coord move: legalMoves) {
-                    squares[move.y][move.x].setBackground(Color.green);
-                }
+                gameEngine.colorAvailableMoves();
             }
             return;
         }
         if (this.piece != null) {
             if (this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
-                for (Coord move: legalMoves) {
-                    squares[move.y][move.x].setBackground(((move.x + move.y) % 2 != 0 ? Color.black : Color.white));
-                }
+                gameEngine.deColorAvailableMoves();
                 legalMoves = selectedPiece.availableMoves();
-                for (Coord move : legalMoves) {
-                    squares[move.y][move.x].setBackground(Color.green);
-                }
+                gameEngine.colorAvailableMoves();
                 return;
             }
         };
         boolean found = false;
         for (Coord move : legalMoves) {
-            if (move.x == this.position.x && move.y == this.position.y) {
-                found = true;
-                break;
-            }
+                if (move.x == this.position.x && move.y == this.position.y) {
+                    found = true;
+                    break;
+                }
             }
         if (!found) {
             squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
             return;
         }
-        squares[selectedPiece.position.y][selectedPiece.position.x].piece = null;
-        for (Coord move: legalMoves) {
-            squares[move.y][move.x].setBackground(((move.x + move.y) % 2 != 0 ? Color.black : Color.white));
-        }
-        legalMoves = null;
-        // add this.piece to an array of eaten pieces
-        this.piece = selectedPiece;
-        selectedPiece.position = this.position;
-        selectedPiece = null;
-        currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
-        playingBoard.revalidate();
-        playingBoard.repaint();
+        gameEngine.movePiece(selectedPiece.position, this.position);
     }
 
     public void shakeButton() {
