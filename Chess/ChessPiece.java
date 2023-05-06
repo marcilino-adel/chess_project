@@ -21,7 +21,21 @@ public abstract class ChessPiece {
     public abstract ArrayList<Coord> availableMoves();
 
     public abstract ImageIcon getPieceIcon();
+    protected ArrayList<Coord> acceptableMoves(int[] deltax,int[] deltay){
+        ArrayList<Coord> moves = new ArrayList<>();
+        for (int i = 0; i < deltax.length; i++) {
+            int newX = this.position.x + deltax[i];
+            int newY = this.position.y + deltay[i];
+            while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0) {
+                moves.add(new Coord(newX, newY));
+                newX += deltax[i];
+                newY += deltay[i];
+            }
+        }
+        return moves;
+    }
 }
+
 
 class Pawn extends ChessPiece {
 
@@ -54,19 +68,9 @@ class Rook extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        ArrayList<Coord> moves = new ArrayList<>();
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
-        for (int i = 0; i < dx.length; i++) {
-            int newX = this.position.x + dx[i];
-            int newY = this.position.y + dy[i];
-            while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0) {
-                moves.add(new Coord(newX, newY));
-                newX += dx[i];
-                newY += dy[i];
-            }
-        }
-        return moves;
+        return acceptableMoves(dx,dy);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -88,7 +92,19 @@ class Knight extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        return null;
+        int[] dx={3,-3,2,-2,2,3,-2,-3};
+        int[] dy={2,2,3,3,-3,-2,-3,-2};
+        ArrayList<Coord> moves = new ArrayList<>();
+        int newX=this.position.x;
+        int newY=this.position.y;
+        for (int i=0;i< dx.length;i++){
+            newX+=dx[i];
+            newY+=dy[i];
+            if (new Coord(newX,newY) ==null){
+                moves.add(new Coord(newX,newY));
+            }
+        }
+        return moves;
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -110,19 +126,9 @@ class Bishop extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        ArrayList<Coord> moves = new ArrayList<>();
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        for (int i = 0; i < dx.length; i++){
-            int newx = this.position.x + dx[i];
-            int newy = this.position.y + dy[i];
-            while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
-                moves.add(new Coord(newx, newy));
-                newx += dx[i];
-                newy += dy[i];
-            }
-        }
-        return moves;
+        return acceptableMoves(dx,dy);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -144,19 +150,9 @@ class Queen extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        ArrayList<Coord> moves = new ArrayList<>();
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
-        for (int i = 0; i < dx.length; i++) {
-            int newx = this.position.x + dx[i];
-            int newy = this.position.y + dy[i];
-            while (newy <= 7 && newy >= 0 && newx <= 7 && newx >= 0){
-                moves.add(new Coord(newx, newy));
-                newx += dx[i];
-                newy += dy[i];
-            }
-        }
-        return moves;
+        return acceptableMoves(dx,dy);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -178,7 +174,17 @@ class King extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        return null;
+        int[] dx={0,0,1,-1,1,1,-1,-1};
+        int[] dy={1,-1,0,0,1,-1,1,-1};
+        ArrayList<Coord> moves = new ArrayList<>();
+        int newX=this.position.x;
+        int newY=this.position.y;
+        for (int i = 0; i < dx.length; i++) {
+             newX+= dx[i];
+             newY+= dy[i];
+            moves.add(new Coord(newX,newY));}
+        return moves;
+
     }
 
     public ImageIcon getPieceIcon() {
