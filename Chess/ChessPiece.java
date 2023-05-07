@@ -240,7 +240,21 @@ class Bishop extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        return filterAvailableMovesByState(findAvailableMoves(dx, dy, 3));
+        ArrayList<ArrayList<Coord>> allMoves = filterAvailableMovesByState(findAvailableMoves(dx, dy, 3));
+        int newX = this.position.x + 1;
+        if (newX >= 0 && newX <= 7) {
+            // add (x, newY)
+            ArrayList<Coord> toAdd = new ArrayList<>();
+            toAdd.add(new Coord(newX, this.position.y));
+            allMoves.add(toAdd);
+        }
+        newX = this.position.x - 1;
+        if (newX >= 0 && newX <= 7) {
+            ArrayList<Coord> toAdd = new ArrayList<>();
+            toAdd.add(new Coord(newX, this.position.y));
+            allMoves.add(toAdd);
+        }
+        return allMoves;
     }
     public ImageIcon getPieceIcon() {
         try {
