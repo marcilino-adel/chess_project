@@ -112,10 +112,15 @@ public class gameEngine extends JFrame {
     }
 
     public static void colorAvailableMoves() {
-        // modify further to color red or green based on the state of the board
         for (var moveList: legalMoves) {
             for (Coord move : moveList) {
                 squares[move.y][move.x].setBackground(Color.green);
+                if (squares[move.y][move.x].piece != null) {
+                    if (squares[move.y][move.x].piece.color == currentPlayer)
+                        squares[move.y][move.x].setBackground(Color.red);
+                    if (selectedPiece.getClass() != Bishop.class)
+                        break;
+                }
             }
         }
         playingBoard.repaint();
@@ -153,5 +158,9 @@ public class gameEngine extends JFrame {
             }
             if (found) break;
         }
+    }
+
+    private static void promotePawn() {
+
     }
 }
