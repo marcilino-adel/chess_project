@@ -1,5 +1,3 @@
-
-
 package Chess;
 
 import javax.imageio.ImageIO;
@@ -7,18 +5,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
-import static Chess.gameEngine.*;
 
 public class TheInterfaces implements ActionListener {
     private static JFrame window;
-    private static JButton rabid;
+    private static JButton rapid;
     private static JLayeredPane layeredPane;
 
     public static void main(String[] args) throws IOException {
         window = new JFrame();
-        rabid=new JButton();
+        rapid = new JButton();
         window.setVisible(true);
         window.setLayout(null);
         window.setSize(600, 600);
@@ -29,38 +28,47 @@ public class TheInterfaces implements ActionListener {
         layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
 
         window.setLayout(new FlowLayout());
+        window.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent componentEvent) {
+                // update the size of the layered pane to match the window size
+                layeredPane.setSize(window.getSize());
+                window.setContentPane(layeredPane);
+            }
+        });
+
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // make the buttons
-        rabid = new JButton();
-        JButton blitz = new JButton();
-        JButton bullet = new JButton();
-        JLabel start = new JLabel();
-        start.setText("Chess");
-        start.setForeground(Color.black);
-        start.setFont(new Font("Mv Boli", Font.BOLD, 50));
-        start.setBounds(200, 50, 200, 100);
-        start.setOpaque(false);
-        layeredPane.add(start, JLayeredPane.PALETTE_LAYER);
+        rapid = new JButton();
+//        JButton blitz = new JButton();
+//        JButton bullet = new JButton();
+        JLabel title = new JLabel();
+        title.setText("Chess");
+        title.setForeground(Color.black);
+        title.setFont(new Font("Mv Boli", Font.BOLD, 50));
+        title.setBounds(200, 50, 200, 100);
+        title.setOpaque(false);
+        layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
 
         // set the buttons
-        rabid.setText("Rabid");
-        rabid.setFont(new Font("comic sans", Font.BOLD, 20));
-        rabid.setFocusable(false);
-        rabid.setForeground(Color.white);
-        rabid.setBackground(Color.black);
-        rabid.setBounds(210, 200, 100, 50);
-        rabid.addActionListener(new TheInterfaces());
-        layeredPane.add(rabid, JLayeredPane.PALETTE_LAYER);
+        rapid.setText("Rapid");
+        rapid.setFont(new Font("comic sans", Font.BOLD, 20));
+        rapid.setFocusable(false);
+//        rapid.setForeground(Color.white);
+        rapid.setBackground(Color.black);
+        rapid.setBounds(210, 200, 100, 50);
+        rapid.addActionListener(new TheInterfaces());
+        layeredPane.add(rapid, JLayeredPane.PALETTE_LAYER);
         window.setContentPane(layeredPane);
         window.pack();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == rabid) {
+        if (e.getSource() == rapid) {
             window.dispose();
-            // create a new instance of the game engine
-            gameEngine game = new gameEngine();
+
+            new gameEngine();
 
         }
     }

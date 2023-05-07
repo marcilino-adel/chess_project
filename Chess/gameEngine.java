@@ -9,7 +9,7 @@ public class gameEngine extends JFrame {
     public static final int boardSize = 8;
     public static Color currentPlayer = Color.white;
     public static ChessPiece selectedPiece;
-    public static ArrayList<Coord> legalMoves;
+    public static ArrayList<ArrayList<Coord>> legalMoves;
     public static JPanel playingBoard;
     public static JPanel informationPanel;
     private static JPanel deadBlackPanel = new JPanel(new GridLayout(3, 5));
@@ -107,15 +107,19 @@ public class gameEngine extends JFrame {
     }
     public static void colorAvailableMoves() {
         // modify further to color red or green based on the state of the board
-        for (Coord move: legalMoves) {
-            squares[move.y][move.x].setBackground(Color.green);
+        for (var moveList: legalMoves) {
+            for (Coord move : moveList) {
+                squares[move.y][move.x].setBackground(Color.green);
+            }
         }
         playingBoard.repaint();
         playingBoard.revalidate();
     }
     public static void deColorAvailableMoves() {
-        for (Coord move: legalMoves) {
-            squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
+        for (var moveList: legalMoves) {
+            for (Coord move : moveList) {
+                squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
+            }
         }
         legalMoves = null;
     }

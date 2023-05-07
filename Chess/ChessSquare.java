@@ -1,6 +1,7 @@
 package Chess;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,15 +39,8 @@ public class ChessSquare extends JButton implements ActionListener {
                 gameEngine.colorAvailableMoves();
                 return;
             }
-        };
-        boolean found = false;
-        for (Coord move : legalMoves) {
-                if (move.x == this.position.x && move.y == this.position.y) {
-                    found = true;
-                    break;
-                }
-            }
-        if (!found) {
+        }
+        if (this.getBackground() != Color.green) {
             squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
             return;
         }
