@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static Chess.gameEngine.squares;
+
 public abstract class ChessPiece {
     protected final int iconSize = 50;
     public Color color;
@@ -21,15 +23,32 @@ public abstract class ChessPiece {
     public abstract ArrayList<Coord> availableMoves();
 
     public abstract ImageIcon getPieceIcon();
-    protected ArrayList<Coord> acceptableMoves(int[] deltax,int[] deltay){
+
+    protected ArrayList<Coord> findAvailableMoves(int[] deltaX, int[] deltaY) {
         ArrayList<Coord> moves = new ArrayList<>();
-        for (int i = 0; i < deltax.length; i++) {
-            int newX = this.position.x + deltax[i];
-            int newY = this.position.y + deltay[i];
+        for (int i = 0; i < deltaX.length; i++) {
+            int newX = this.position.x + deltaX[i];
+            int newY = this.position.y + deltaY[i];
             while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0) {
                 moves.add(new Coord(newX, newY));
-                newX += deltax[i];
-                newY += deltay[i];
+                newX += deltaX[i];
+                newY += deltaY[i];
+            }
+        }
+        return moves;
+    }
+
+    protected ArrayList<Coord> findAvailableMoves(int[] deltaX, int[] deltaY, int limit) {
+        ArrayList<Coord> moves = new ArrayList<>();
+        for (int i = 0; i < deltaX.length; i++) {
+            int newX = this.position.x + deltaX[i];
+            int newY = this.position.y + deltaY[i];
+            int count = 0;
+            while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0 && count < limit) {
+                moves.add(new Coord(newX, newY));
+                newX += deltaX[i];
+                newY += deltaY[i];
+                count++;
             }
         }
         return moves;
@@ -39,12 +58,28 @@ public abstract class ChessPiece {
 
 class Pawn extends ChessPiece {
 
+    private int direction;
+
     public Pawn(Color color, int x, int y) {
         super(color, x, y);
+        direction = color == Color.white ? -1 : 1;
     }
     @Override
     public ArrayList<Coord> availableMoves() {
-        return null;
+        ArrayList<Coord> moves = new ArrayList<>();
+        if (!this.hasMoved) {
+            moves.add(new Coord(position.x, position.y + direction));
+            moves.add(new Coord(position.x, position.y + 2 * direction));
+        }
+        int newX = position.x + 1;
+        int newY = position.y + direction;
+        if (newX <= 7 && newY >=0 && newY <= 7) {
+            if (squares[newY][newX].piece != null && squares[newY][newX].piece.color != this.color) moves.add(new Coord(newX, newY));
+            newX = position.x - 1;
+            if (newX >= 0)
+                if (squares[newY][newX].piece != null && squares[newY][newX].piece.color != this.color) moves.add(new Coord(newX, newY));
+        }
+        return moves;
     }
 
     @Override
@@ -70,7 +105,7 @@ class Rook extends ChessPiece {
     public ArrayList<Coord> availableMoves() {
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
-        return acceptableMoves(dx,dy);
+        return findAvailableMoves(dx,dy);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -92,19 +127,9 @@ class Knight extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        int[] dx={3,-3,2,-2,2,3,-2,-3};
-        int[] dy={2,2,3,3,-3,-2,-3,-2};
-        ArrayList<Coord> moves = new ArrayList<>();
-        int newX=this.position.x;
-        int newY=this.position.y;
-        for (int i=0;i< dx.length;i++){
-            newX+=dx[i];
-            newY+=dy[i];
-            if (new Coord(newX,newY) ==null){
-                moves.add(new Coord(newX,newY));
-            }
-        }
-        return moves;
+        int[] dx = {3, -3, 2, -2, 2, 3, -2, -3};
+        int[] dy = {2, 2, 3, 3, -3, -2, -3, -2};
+        return findAvailableMoves(dx, dy, 1);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -128,7 +153,7 @@ class Bishop extends ChessPiece {
     public ArrayList<Coord> availableMoves() {
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        return acceptableMoves(dx,dy);
+        return findAvailableMoves(dx, dy, 3);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -152,7 +177,7 @@ class Queen extends ChessPiece {
     public ArrayList<Coord> availableMoves() {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
-        return acceptableMoves(dx,dy);
+        return findAvailableMoves(dx,dy);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -174,17 +199,9 @@ class King extends ChessPiece {
 
     @Override
     public ArrayList<Coord> availableMoves() {
-        int[] dx={0,0,1,-1,1,1,-1,-1};
-        int[] dy={1,-1,0,0,1,-1,1,-1};
-        ArrayList<Coord> moves = new ArrayList<>();
-        int newX=this.position.x;
-        int newY=this.position.y;
-        for (int i = 0; i < dx.length; i++) {
-             newX+= dx[i];
-             newY+= dy[i];
-            moves.add(new Coord(newX,newY));}
-        return moves;
-
+        int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
+        int[] dy = {1, -1, 0, 0, 1, -1, 1, -1};
+        return findAvailableMoves(dx, dy, 1);
     }
 
     public ImageIcon getPieceIcon() {

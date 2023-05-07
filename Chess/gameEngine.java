@@ -11,8 +11,11 @@ public class gameEngine extends JFrame {
     public static ChessPiece selectedPiece;
     public static ArrayList<Coord> legalMoves;
     public static JPanel playingBoard;
-    public static JPanel informationBoard;
+    public static JPanel informationPanel;
     public static ChessSquare[][] squares = new ChessSquare[boardSize][boardSize];
+
+    private static ArrayList<ChessPiece> deadWhitePieces = new ArrayList<>();
+    private static ArrayList<ChessPiece> deadBlackPieces = new ArrayList<>();
 
     public gameEngine() {
         setTitle("Chess Game");
@@ -26,6 +29,7 @@ public class gameEngine extends JFrame {
         GridLayout layout = new GridLayout(boardSize, boardSize);
         playingBoard = new JPanel(layout);
 
+        // initialize board layout
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
                 squares[row][col] = new ChessSquare(col, row);
@@ -35,46 +39,52 @@ public class gameEngine extends JFrame {
                     squares[row][col].setBackground(Color.white);
                 }
                 playingBoard.add(squares[row][col]);
-               if(row==1)
+               if (row == 1)
                    squares[row][col].piece=new Pawn(Color.black,col,row);
-               else if (row==6) {
+               else if (row == 6) {
                    squares[row][col].piece=new Pawn(Color.white,col,row);
                }
-               else if(row==0&&(col==0||col==7))
+               else if(row == 0 && (col == 0 || col == 7))
                    squares[row][col].piece=new Rook(Color.black,col,row);
-               else if(row==0&&(col==1||col==6))
+               else if (row == 0 && (col == 1 || col == 6))
                    squares[row][col].piece=new Knight(Color.black,col,row);
-               else if(row==0&&(col==2||col==5))
+               else if(row == 0 && (col == 2 || col == 5))
                    squares[row][col].piece=new Bishop(Color.black,col,row);
-               else if(row==0&&col==4)
+               else if(row == 0 && col == 4)
                    squares[row][col].piece=new King(Color.black,col,row);
-               else if(row==0&&col==3)
+               else if(row == 0)
                    squares[row][col].piece=new Queen(Color.black,col,row);
                    //Set the second half
-               else if(row==7&&(col==0||col==7))
+               else if(row == 7 && (col == 0 || col == 7))
                    squares[row][col].piece=new Rook(Color.white,col,row);
-               else if(row==7&&(col==1||col==6))
+               else if(row == 7 && (col == 1 || col == 6))
                        squares[row][col].piece=new Knight(Color.white,col,row);
-               else if(row==7&&(col==2||col==5))
+               else if(row == 7 && (col == 2 || col == 5))
                    squares[row][col].piece=new Bishop(Color.white,col,row);
-               else if(row==7&&col==4)
+               else if(row == 7 && col == 4)
                    squares[row][col].piece=new King(Color.white,col,row);
-               else if(row==7&&col==3)
+               else if(row == 7)
                    squares[row][col].piece=new Queen(Color.white,col,row);
 
             }
         }
 
-
         add(playingBoard);
         setVisible(true);
-    }
 
-    public static void main(String[] args) {
-        new gameEngine();
+        // initialize information panel
+
     }
 
     public static void movePiece(Coord initPos, Coord finalPos) {
+        if (squares[finalPos.y][finalPos.x].piece != null) {
+            if (currentPlayer == Color.white) {
+                deadBlackPieces.add(squares[finalPos.y][finalPos.x].piece);
+            } else {
+                deadWhitePieces.add(squares[finalPos.y][finalPos.x].piece);
+            }
+        }
+        selectedPiece.hasMoved = true;
         squares[finalPos.y][finalPos.x].piece = selectedPiece;
         selectedPiece.position = finalPos;
         squares[initPos.y][initPos.x].piece = null;
@@ -82,7 +92,6 @@ public class gameEngine extends JFrame {
         selectedPiece = null;
         currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
     }
-
     public static void colorAvailableMoves() {
         // modify further to color red or green based on the state of the board
         for (Coord move: legalMoves) {
