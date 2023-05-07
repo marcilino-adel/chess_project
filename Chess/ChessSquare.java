@@ -1,7 +1,6 @@
 package Chess;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,7 +23,7 @@ public class ChessSquare extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (selectedPiece == null) {
-            if (this.piece != null) {
+            if (this.piece != null && this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
                 legalMoves = selectedPiece.availableMoves();
                 gameEngine.colorAvailableMoves();
