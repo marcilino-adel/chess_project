@@ -78,19 +78,27 @@ public class gameEngine extends JFrame {
 
     public static void movePiece(Coord initPos, Coord finalPos) {
         if (squares[finalPos.y][finalPos.x].piece != null) {
-            if (currentPlayer == Color.white) {
+            if (squares[finalPos.y][finalPos.x].piece.color == Color.white) {
                 deadBlackPieces.add(squares[finalPos.y][finalPos.x].piece);
             } else {
                 deadWhitePieces.add(squares[finalPos.y][finalPos.x].piece);
             }
         }
         selectedPiece.hasMoved = true;
+        if (squares[finalPos.y][finalPos.x].piece != null) {
+            if (squares[finalPos.y][finalPos.x].piece.color == Color.white)
+                deadWhitePieces.add(squares[finalPos.y][finalPos.x].piece);
+            else
+                deadBlackPieces.add(squares[finalPos.y][finalPos.x].piece);
+        }
         squares[finalPos.y][finalPos.x].piece = selectedPiece;
         selectedPiece.position = finalPos;
         squares[initPos.y][initPos.x].piece = null;
         deColorAvailableMoves();
         selectedPiece = null;
         currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
+        playingBoard.revalidate();
+        playingBoard.repaint();
     }
     public static void colorAvailableMoves() {
         // modify further to color red or green based on the state of the board
@@ -105,7 +113,5 @@ public class gameEngine extends JFrame {
             squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
         }
         legalMoves = null;
-        playingBoard.repaint();
-        playingBoard.revalidate();
     }
 }

@@ -58,7 +58,7 @@ public abstract class ChessPiece {
 
 class Pawn extends ChessPiece {
 
-    private int direction;
+    private final int direction;
 
     public Pawn(Color color, int x, int y) {
         super(color, x, y);
@@ -67,8 +67,8 @@ class Pawn extends ChessPiece {
     @Override
     public ArrayList<Coord> availableMoves() {
         ArrayList<Coord> moves = new ArrayList<>();
+        moves.add(new Coord(position.x, position.y + direction));
         if (!this.hasMoved) {
-            moves.add(new Coord(position.x, position.y + direction));
             moves.add(new Coord(position.x, position.y + 2 * direction));
         }
         int newX = position.x + 1;
