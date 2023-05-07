@@ -94,7 +94,11 @@ public class gameEngine extends JFrame {
     }
 
     public static void movePiece(Coord initPos, Coord finalPos) {
-        if (squares[finalPos.y][finalPos.x].piece != null) killPiece(finalPos);
+        SoundEffect toPlay;
+        if (squares[finalPos.y][finalPos.x].piece != null) {
+            killPiece(finalPos);
+            toPlay = new SoundEffect("capture.wav");
+        } else toPlay = new SoundEffect("move.wav");
         selectedPiece.hasMoved = true;
         squares[finalPos.y][finalPos.x].piece = selectedPiece;
         selectedPiece.position = finalPos;
@@ -104,7 +108,9 @@ public class gameEngine extends JFrame {
         currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
         playingBoard.revalidate();
         playingBoard.repaint();
+        toPlay.play();
     }
+
     public static void colorAvailableMoves() {
         // modify further to color red or green based on the state of the board
         for (var moveList: legalMoves) {
@@ -115,6 +121,7 @@ public class gameEngine extends JFrame {
         playingBoard.repaint();
         playingBoard.revalidate();
     }
+
     public static void deColorAvailableMoves() {
         for (var moveList: legalMoves) {
             for (Coord move : moveList) {
@@ -123,6 +130,7 @@ public class gameEngine extends JFrame {
         }
         legalMoves = null;
     }
+
     private static void killPiece(Coord finalPos) {
         boolean found = false;
         Image icon = squares[finalPos.y][finalPos.x].piece.getPieceIcon().getImage();
