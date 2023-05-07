@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static Chess.gameEngine.squares;
+import static Chess.gameEngine.*;
 
 public abstract class ChessPiece {
     protected final int iconSize = 50;
@@ -57,6 +57,77 @@ public abstract class ChessPiece {
         }
         return allMoves;
     }
+
+    protected ArrayList<ArrayList<Coord>> filterAvailableMovesByState(ArrayList<ArrayList<Coord>> legalMoves) {
+        ArrayList<ArrayList<Coord>> toReturn = new ArrayList<>();
+        ArrayList<Coord> moves;
+        for (var moveList: legalMoves) {
+            moves = new ArrayList<>();
+            for (int i = 0; i < moveList.size(); i++) {
+                moves.add(moveList.get(i));
+                if (squares[moveList.get(i).y][moveList.get(i).x].piece != null) {
+                    // remove the rest of the moves in this direction
+                    break;
+                }
+            }
+            toReturn.add(moves);
+        }
+        return toReturn;
+    }
+
+    public static ArrayList<ArrayList<Coord>> filterAvailableMovesByCheck(ArrayList<ArrayList<Coord>> legalMoves) {
+        Coord kingPos = null;
+
+        ArrayList<ArrayList<Coord>> toReturn = new ArrayList<>();
+
+        // removing all moves for the selected piece if it results in a check after the move
+        for (var moveList: legalMoves) {
+            ArrayList<Coord> directionToReturn = new ArrayList<>();
+            for (Coord move: moveList) {
+                boolean valid = true;
+                virtualMove(selectedPiece.position, move);
+
+                // finding current player's king
+                boolean found = false;
+                for (int row = 0; row < boardSize; row++) {
+                    if (found) break;
+                    for (int col = 0; col < boardSize; col++) {
+                        if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer && virtualBoard[row][col].getClass() == King.class) {
+                            kingPos = new Coord(col, row);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                for (int row = 0; row < boardSize; row++) {
+                    if (!valid) break;
+                    for (int col = 0; col < boardSize; col++) {
+                        if (!valid) break;
+                        if (virtualBoard[row][col] != null && virtualBoard[row][col].color != currentPlayer) {
+                            ArrayList<ArrayList<Coord>> enemyMoves = virtualBoard[row][col].availableMoves();
+                            for (var enemyMoves_: enemyMoves) {
+                                if (!valid) break;
+                                for (Coord enemyMove: enemyMoves_) {
+                                    if (!valid) break;
+                                    if (enemyMove.y == kingPos.y && enemyMove.x == kingPos.x) {
+                                        valid = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                virtualMove(move, selectedPiece.position);
+                System.out.println("kingPos = (" + kingPos.x + ", " + kingPos.y + ")" );
+                System.out.println("move = (" + move.x + ", " + move.y + ")");
+                if (valid)
+                    directionToReturn.add(move);
+            }
+            toReturn.add(directionToReturn);
+        }
+        return toReturn;
+    }
 }
 
 
@@ -94,7 +165,7 @@ class Pawn extends ChessPiece {
                 allMoves.add(moves);
             }
         }
-        return allMoves;
+        return filterAvailableMovesByState(allMoves);
     }
 
     @Override
@@ -120,7 +191,7 @@ class Rook extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
-        return findAvailableMoves(dx,dy);
+        return filterAvailableMovesByState(findAvailableMoves(dx, dy));
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -144,7 +215,7 @@ class Knight extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {3, -3, 2, -2, 2, 3, -2, -3};
         int[] dy = {2, 2, 3, 3, -3, -2, -3, -2};
-        return findAvailableMoves(dx, dy, 1);
+        return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -168,7 +239,7 @@ class Bishop extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        return findAvailableMoves(dx, dy, 3);
+        return filterAvailableMovesByState(findAvailableMoves(dx, dy, 3));
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -192,7 +263,7 @@ class Queen extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
-        return findAvailableMoves(dx,dy);
+        return filterAvailableMovesByState(findAvailableMoves(dx, dy));
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -216,7 +287,7 @@ class King extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1, -1, 0, 0, 1, -1, 1, -1};
-        return findAvailableMoves(dx, dy, 1);
+        return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
     }
 
     public ImageIcon getPieceIcon() {

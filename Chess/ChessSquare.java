@@ -23,10 +23,12 @@ public class ChessSquare extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        setVirtualBoard();
         if (selectedPiece == null) {
             if (this.piece != null && this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
                 legalMoves = selectedPiece.availableMoves();
+                legalMoves = ChessPiece.filterAvailableMovesByCheck(legalMoves);
                 gameEngine.colorAvailableMoves();
             }
             return;
@@ -36,6 +38,7 @@ public class ChessSquare extends JButton implements ActionListener {
                 selectedPiece = this.piece;
                 gameEngine.deColorAvailableMoves();
                 legalMoves = selectedPiece.availableMoves();
+                legalMoves = ChessPiece.filterAvailableMovesByCheck(legalMoves);
                 gameEngine.colorAvailableMoves();
                 return;
             }

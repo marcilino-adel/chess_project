@@ -17,6 +17,7 @@ public class gameEngine extends JFrame {
     private static JLabel[][] deadWhiteLabels = new JLabel[3][5];
     private static JLabel[][] deadBlackLabels = new JLabel[3][5];
     public static ChessSquare[][] squares = new ChessSquare[boardSize][boardSize];
+    public static ChessPiece[][] virtualBoard = new ChessPiece[boardSize][boardSize];
 
     public gameEngine() {
         setTitle("Chess Game");
@@ -162,5 +163,17 @@ public class gameEngine extends JFrame {
 
     private static void promotePawn() {
 
+    }
+
+    public static void setVirtualBoard() {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                virtualBoard[row][col] = squares[row][col].piece;
+            }
+        }
+    }
+    public static void virtualMove(Coord initPos, Coord finalPos) {
+        virtualBoard[finalPos.y][finalPos.x] = virtualBoard[initPos.y][initPos.x];
+        virtualBoard[initPos.y][initPos.x] = null;
     }
 }
