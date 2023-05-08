@@ -2,8 +2,10 @@ package Chess;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
+import static Chess.TheInterfaces.*;
+
 
 import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
@@ -78,7 +80,7 @@ public class gameEngine extends JFrame {
 
         // initialize information panel
         informationPanel = new JPanel(new GridLayout(4, 1));
-        JLabel blackLabel = new JLabel("Player 1");
+        JLabel blackLabel = new JLabel("player 1");
         JLabel whiteLabel = new JLabel("Player 2");
 
         for (int row = 0; row < 3; row++) {
