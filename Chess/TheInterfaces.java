@@ -41,29 +41,29 @@ public class TheInterfaces implements ActionListener {
         JLabel namelabel1=new JLabel();
         JLabel namelabel2=new JLabel();
 
-        namelabel1.setText("BLACK Player USERNAME :");
+        namelabel1.setText("BLACK PLAYER USERNAME :");
         namelabel1.setForeground(Color.black);
         namelabel1.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel1.setBounds(20, 50, 280, 50);
+        namelabel1.setBounds(20, 50, 290, 50);
         namelabel1.setOpaque(false);
         layeredPane_for_users.add(namelabel1, JLayeredPane.PALETTE_LAYER);
 
-        namelabel2.setText("WHITE Player USERNAME :");
+        namelabel2.setText("WHITE PLAYER USERNAME :");
         namelabel2.setForeground(Color.black);
         namelabel2.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel2.setBounds(20, 400, 280, 50);
+        namelabel2.setBounds(20, 400, 290, 50);
         namelabel2.setOpaque(false);
         layeredPane_for_users.add(namelabel2, JLayeredPane.PALETTE_LAYER);
 
         white_player = new JTextField();
-        white_player.setBounds(300, 400, 200, 50);
+        white_player.setBounds(310, 400, 200, 50);
         white_player.setFont(new Font("normal", Font.BOLD, 20));
         white_player.setOpaque(false);
         white_player.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(white_player,JLayeredPane.PALETTE_LAYER);
 
         black_player = new JTextField();
-        black_player.setBounds(300, 50, 200, 50);
+        black_player.setBounds(310, 50, 200, 50);
         black_player.setFont(new Font("normal", Font.BOLD, 20));
         black_player.setOpaque(false);
         black_player.setHorizontalAlignment(JTextField.CENTER);
