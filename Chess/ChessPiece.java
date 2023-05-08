@@ -100,24 +100,10 @@ public abstract class ChessPiece {
                     }
                 }
 
-                for (int row = 0; row < boardSize; row++) {
-                    if (!valid) break;
-                    for (int col = 0; col < boardSize; col++) {
-                        if (!valid) break;
-                        if (virtualBoard[row][col] != null && virtualBoard[row][col].color != currentPlayer) {
-                            ArrayList<ArrayList<Coord>> enemyMoves = virtualBoard[row][col].availableMoves();
-                            for (var enemyMoves_: enemyMoves) {
-                                if (!valid) break;
-                                for (Coord enemyMove: enemyMoves_) {
-                                    if (!valid) break;
-                                    if (enemyMove.y == kingPos.y && enemyMove.x == kingPos.x) {
-                                        valid = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                // find if the king is in check after making said move
+                // if not then the move is valid and could be added to the returned list
+                valid = !isInCheck(kingPos);
+
                 setVirtualBoard();
                 if (valid)
                     directionToReturn.add(move);

@@ -119,7 +119,6 @@ public class gameEngine extends JFrame {
             } else {
                 System.out.println("White wins");
             }
-            playingBoard.disable();
         }
     }
 
@@ -190,7 +189,6 @@ public class gameEngine extends JFrame {
         virtualBoard[finalPos.y][finalPos.x] = virtualBoard[initPos.y][initPos.x];
         virtualBoard[initPos.y][initPos.x] = null;
     }
-
     private static boolean isCheckMate() {
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
@@ -209,5 +207,20 @@ public class gameEngine extends JFrame {
         }
         selectedPiece = null;
         return true;
+    }
+    public static boolean isInCheck(Coord kingPos) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (virtualBoard[row][col] != null && virtualBoard[row][col].color != currentPlayer) {
+                    ArrayList<ArrayList<Coord>> moves = virtualBoard[row][col].availableMoves();
+                    for (var list: moves) {
+                        for (var move: list) {
+                            if (move.y == kingPos.y && move.x == kingPos.x) return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
