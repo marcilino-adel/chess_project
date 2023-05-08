@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static Chess.gameEngine.*;
+import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
 public class ChessSquare extends JButton implements ActionListener {
     public ChessPiece piece;
@@ -28,7 +29,7 @@ public class ChessSquare extends JButton implements ActionListener {
             if (this.piece != null && this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
                 legalMoves = selectedPiece.availableMoves();
-                legalMoves = ChessPiece.filterAvailableMovesByCheck(legalMoves);
+                legalMoves = filterAvailableMovesByCheck(legalMoves);
                 gameEngine.colorAvailableMoves();
             }
             return;
@@ -38,7 +39,7 @@ public class ChessSquare extends JButton implements ActionListener {
                 selectedPiece = this.piece;
                 gameEngine.deColorAvailableMoves();
                 legalMoves = selectedPiece.availableMoves();
-                legalMoves = ChessPiece.filterAvailableMovesByCheck(legalMoves);
+                legalMoves = filterAvailableMovesByCheck(legalMoves);
                 gameEngine.colorAvailableMoves();
                 return;
             }

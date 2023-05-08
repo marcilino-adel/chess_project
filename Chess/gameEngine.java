@@ -5,6 +5,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
+import static Chess.ChessPiece.filterAvailableMovesByCheck;
+
 public class gameEngine extends JFrame {
     public static final int boardSize = 8;
     public static Color currentPlayer = Color.white;
@@ -110,6 +112,15 @@ public class gameEngine extends JFrame {
         playingBoard.revalidate();
         playingBoard.repaint();
         toPlay.play();
+        setVirtualBoard();
+        if (isCheckMate()) {
+            if (currentPlayer == Color.white) {
+                System.out.println("Black wins");
+            } else {
+                System.out.println("White wins");
+            }
+            playingBoard.disable();
+        }
     }
 
     public static void colorAvailableMoves() {
@@ -165,6 +176,7 @@ public class gameEngine extends JFrame {
 
     }
 
+    // These methods are used when checking for check and checkmate
     public static void setVirtualBoard() {
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
@@ -173,7 +185,29 @@ public class gameEngine extends JFrame {
         }
     }
     public static void virtualMove(Coord initPos, Coord finalPos) {
+        if (virtualBoard[finalPos.y][finalPos.x] != null && virtualBoard[finalPos.y][finalPos.x].color == virtualBoard[initPos.y][initPos.x].color)
+            return;
         virtualBoard[finalPos.y][finalPos.x] = virtualBoard[initPos.y][initPos.x];
         virtualBoard[initPos.y][initPos.x] = null;
+    }
+
+    private static boolean isCheckMate() {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer) {
+                    selectedPiece = virtualBoard[row][col];
+                    ArrayList<ArrayList<Coord>> availableMoves = selectedPiece.availableMoves();
+                    availableMoves = filterAvailableMovesByCheck(availableMoves);
+                    for (var list: availableMoves) {
+                        if (list.size() != 0) {
+                            selectedPiece = null;
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        selectedPiece = null;
+        return true;
     }
 }

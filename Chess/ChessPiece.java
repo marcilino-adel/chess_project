@@ -65,7 +65,7 @@ public abstract class ChessPiece {
             moves = new ArrayList<>();
             for (int i = 0; i < moveList.size(); i++) {
                 moves.add(moveList.get(i));
-                if (squares[moveList.get(i).y][moveList.get(i).x].piece != null) {
+                if (virtualBoard[moveList.get(i).y][moveList.get(i).x] != null) {
                     // remove the rest of the moves in this direction
                     break;
                 }
@@ -118,9 +118,7 @@ public abstract class ChessPiece {
                         }
                     }
                 }
-                virtualMove(move, selectedPiece.position);
-                System.out.println("kingPos = (" + kingPos.x + ", " + kingPos.y + ")" );
-                System.out.println("move = (" + move.x + ", " + move.y + ")");
+                setVirtualBoard();
                 if (valid)
                     directionToReturn.add(move);
             }
