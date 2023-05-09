@@ -131,7 +131,7 @@ public void actionPerformed(ActionEvent e) {
 
 
         if(whitePlayerName.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter names for both players");
+            JOptionPane.showMessageDialog(null, "Please enter the username");
         } else {
             window.dispose();
             new gameEngine();
