@@ -1,7 +1,6 @@
 package Chess;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,33 +24,55 @@ public class ChessSquare extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         setVirtualBoard();
+        // set the selected piece if the square selected contains a piece of the right color
         if (selectedPiece == null) {
             if (this.piece != null && this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
                 legalMoves = selectedPiece.availableMoves();
                 legalMoves = filterAvailableMovesByCheck(legalMoves);
+                if (selectedPiece instanceof King) {
+                    legalMoves.add(((King) selectedPiece).castlingMoves());
+                }
                 gameEngine.colorAvailableMoves();
             }
             return;
         }
-        if (this.piece != null) {
-            if (this.piece.color == currentPlayer) {
-                selectedPiece = this.piece;
-                gameEngine.deColorAvailableMoves();
-                legalMoves = selectedPiece.availableMoves();
-                legalMoves = filterAvailableMovesByCheck(legalMoves);
-                gameEngine.colorAvailableMoves();
-                return;
+        if (this.piece != null && this.piece.color == currentPlayer) {
+            selectedPiece = this.piece;
+            gameEngine.deColorAvailableMoves();
+            legalMoves = selectedPiece.availableMoves();
+            legalMoves = filterAvailableMovesByCheck(legalMoves);
+            if (selectedPiece instanceof King) {
+                legalMoves.add(((King) selectedPiece).castlingMoves());
+            }
+            gameEngine.colorAvailableMoves();
+            return;
+        }
+
+        // search for this square in the selected piece's legal moves
+        boolean found = false;
+        for (int i = 0; i < legalMoves.size(); i++) {
+            if (found) break;
+            for (int j = 0; j < legalMoves.get(i).size(); j++) {
+                if (legalMoves.get(i).get(j).y == this.position.y && legalMoves.get(i).get(j).x == this.position.x) {
+                    isCastling = false;
+                    if (selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1) {
+                        isCastling = true;
+                    }
+                    found = true;
+                    break;
+                }
             }
         }
-        if (this.getBackground() != Color.green) {
+
+        if (!found) {
             squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
             return;
         }
         gameEngine.movePiece(selectedPiece.position, this.position);
     }
 
-    public void shakeButton() {
+    private void shakeButton() {
         int delay = 50; // delay in milliseconds
         int numShakes = 7;
         int dx = 3;

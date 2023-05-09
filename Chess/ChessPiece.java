@@ -63,12 +63,16 @@ public abstract class ChessPiece {
         ArrayList<Coord> moves;
         for (var moveList: legalMoves) {
             moves = new ArrayList<>();
-            for (int i = 0; i < moveList.size(); i++) {
-                moves.add(moveList.get(i));
-                if (virtualBoard[moveList.get(i).y][moveList.get(i).x] != null) {
-                    // remove the rest of the moves in this direction
+            for (Coord coord : moveList) {
+                if (virtualBoard[coord.y][coord.x] != null && virtualBoard[coord.y][coord.x].color == this.color) {
+                    // skip this move if it's a bishop as it can jump
+                    // remove the rest of this direction otherwise
+                    if (this.getClass() == Bishop.class) {
+                        continue;
+                    }
                     break;
                 }
+                moves.add(coord);
             }
             toReturn.add(moves);
         }
@@ -237,7 +241,7 @@ class Bishop extends ChessPiece {
             toAdd.add(new Coord(newX, this.position.y));
             allMoves.add(toAdd);
         }
-        return allMoves;
+        return filterAvailableMovesByState(allMoves);
     }
     public ImageIcon getPieceIcon() {
         try {
@@ -286,6 +290,39 @@ class King extends ChessPiece {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1, -1, 0, 0, 1, -1, 1, -1};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
+    }
+
+    public ArrayList<Coord> castlingMoves() {
+        ArrayList<Coord> toReturn = new ArrayList<>();
+        if (!this.hasMoved && !isInCheck(this.position)) { // && not in check
+            int[] rookDx = {-1, 1};
+            for (int direction: rookDx) {
+                int rookX = (direction == -1) ? 0 : 7;
+                ChessPiece rook = squares[this.position.y][rookX].piece;
+                if (rook instanceof Rook && rook.color == this.color && !rook.hasMoved) {
+                    boolean valid = true;
+                    int count = 0;
+                    for (int j = this.position.x + direction; j != rookX; j += direction) {
+                        if (squares[this.position.y][j].piece != null) {
+                            valid = false;
+                            break;
+                        }
+                        if (count < 2) {
+                            count++;
+                            virtualMove(this.position, new Coord(j, this.position.y));
+                            if (isInCheck(new Coord(j, this.position.y))) {
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (valid) {
+                        toReturn.add(new Coord(this.position.x + 2 * direction, this.position.y));
+                    }
+                }
+            }
+        }
+        return toReturn;
     }
 
     public ImageIcon getPieceIcon() {

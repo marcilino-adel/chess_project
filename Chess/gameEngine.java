@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
 public class gameEngine extends JFrame {
+    public static boolean isCastling;
     public static final int CHECKMATE = 0;
     public static final int TIMEOUT = 1;
     public static final int STALEMATE = 2;
@@ -105,21 +106,26 @@ public class gameEngine extends JFrame {
 
     public static void movePiece(Coord initPos, Coord finalPos) {
         // moves the piece, updates the board, checks for checkmate, changes the current player and plays a sound effect
-        SoundEffect toPlay;
-        if (squares[finalPos.y][finalPos.x].piece != null) {
-            killPiece(finalPos);
-            toPlay = new SoundEffect("capture.wav");
-        } else toPlay = new SoundEffect("move.wav");
-        selectedPiece.hasMoved = true;
-        squares[finalPos.y][finalPos.x].piece = selectedPiece;
-        selectedPiece.position = finalPos;
-        squares[initPos.y][initPos.x].piece = null;
+        if (isCastling) {
+            // call castling move method
+            castle(initPos, finalPos);
+        } else {
+            SoundEffect toPlay;
+            if (squares[finalPos.y][finalPos.x].piece != null) {
+                killPiece(finalPos);
+                toPlay = new SoundEffect("capture.wav");
+            } else toPlay = new SoundEffect("move.wav");
+            selectedPiece.hasMoved = true;
+            squares[finalPos.y][finalPos.x].piece = selectedPiece;
+            selectedPiece.position = finalPos;
+            squares[initPos.y][initPos.x].piece = null;
+            toPlay.play();
+        }
         deColorAvailableMoves();
         selectedPiece = null;
         currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
         playingBoard.revalidate();
         playingBoard.repaint();
-        toPlay.play();
 
         // change timers
         if (currentPlayer == Color.white) {
@@ -141,12 +147,6 @@ public class gameEngine extends JFrame {
         for (var moveList: legalMoves) {
             for (Coord move : moveList) {
                 squares[move.y][move.x].setBackground(Color.green);
-                if (squares[move.y][move.x].piece != null) {
-                    if (squares[move.y][move.x].piece.color == currentPlayer)
-                        squares[move.y][move.x].setBackground(Color.red);
-                    if (selectedPiece.getClass() != Bishop.class)
-                        break;
-                }
             }
         }
         playingBoard.repaint();
@@ -190,7 +190,6 @@ public class gameEngine extends JFrame {
 
     }
 
-    // These methods are used when checking for check and checkmate
     public static void setVirtualBoard() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -269,6 +268,29 @@ public class gameEngine extends JFrame {
                 square.setEnabled(false);
             }
         }
+    }
+    private static void castle(Coord initPos, Coord finalPos) {
+        // add a new soundtrack for castling
+        selectedPiece.hasMoved = true;
+        squares[finalPos.y][finalPos.x].piece = selectedPiece;
+        selectedPiece.position = finalPos;
+        squares[initPos.y][initPos.x].piece = null;
+        if (finalPos.x == 6) {
+            // king side castling
+            squares[finalPos.y][5].piece = squares[finalPos.y][7].piece;
+            squares[finalPos.y][7].piece = null;
+            squares[finalPos.y][5].piece.position = new Coord(5, finalPos.y);
+            squares[finalPos.y][5].piece.hasMoved = true;
+        } else {
+            // queen side castling
+            squares[finalPos.y][3].piece = squares[finalPos.y][0].piece;
+            squares[finalPos.y][0].piece = null;
+            squares[finalPos.y][3].piece.position = new Coord(3, finalPos.y);
+            squares[finalPos.y][3].piece.hasMoved = true;
+        }
+
+        SoundEffect toPlay = new SoundEffect("move.wav");
+        toPlay.play();
     }
     public static void main(String[] argv) {
         new gameEngine();
