@@ -16,6 +16,8 @@ public class gameEngine extends JFrame {
     public static ArrayList<ArrayList<Coord>> legalMoves;
     public static JPanel playingBoard;
     public static JPanel informationPanel;
+    private static MyTimer blackTimer = new MyTimer();
+    private static MyTimer whiteTimer = new MyTimer();
     private static JPanel deadBlackPanel = new JPanel(new GridLayout(3, 5));
     private static JPanel deadWhitePanel = new JPanel(new GridLayout(3, 5));
     private static JLabel[][] deadWhiteLabels = new JLabel[3][5];
@@ -79,7 +81,7 @@ public class gameEngine extends JFrame {
         setVisible(true);
 
         // initialize information panel
-        informationPanel = new JPanel(new GridLayout(4, 1));
+        informationPanel = new JPanel(new GridLayout(6, 1));
         JLabel blackLabel = new JLabel("player 1");
         JLabel whiteLabel = new JLabel("Player 2");
 
@@ -93,12 +95,15 @@ public class gameEngine extends JFrame {
         }
         informationPanel.add(blackLabel);
         informationPanel.add(deadBlackPanel);
+        informationPanel.add(blackTimer);
+        informationPanel.add(whiteTimer);
         informationPanel.add(deadWhitePanel);
         informationPanel.add(whiteLabel);
         add(informationPanel, BorderLayout.EAST);
     }
 
     public static void movePiece(Coord initPos, Coord finalPos) {
+        // moves the piece, updates the board, checks for checkmate, changes the current player and plays a sound effect
         SoundEffect toPlay;
         if (squares[finalPos.y][finalPos.x].piece != null) {
             killPiece(finalPos);
@@ -114,6 +119,8 @@ public class gameEngine extends JFrame {
         playingBoard.revalidate();
         playingBoard.repaint();
         toPlay.play();
+
+        // check for checkmate
         setVirtualBoard();
         if (isCheckMate()) {
             if (currentPlayer == Color.white) {
@@ -121,6 +128,15 @@ public class gameEngine extends JFrame {
             } else {
                 System.out.println("White wins");
             }
+        }
+
+        // change timers
+        if (currentPlayer == Color.white) {
+            whiteTimer.unpause();
+            blackTimer.pause();
+        } else {
+            whiteTimer.pause();
+            blackTimer.unpause();
         }
     }
 
@@ -224,6 +240,13 @@ public class gameEngine extends JFrame {
             }
         }
         return false;
+    }
+    public static void endByTimeout() {
+        if (currentPlayer == Color.white) {
+            System.out.println("Black wins by timeout");
+        } else {
+            System.out.println("White wins by timeout");
+        }
     }
 
     public static void main(String[] argv) {
