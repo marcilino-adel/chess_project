@@ -79,6 +79,14 @@ public class gameEngine extends JFrame {
             }
         }
 
+        // used for testing
+//        squares[7][4].piece = new King(Color.black, 4, 7);
+//        squares[7][5].piece = new Bishop(Color.black, 5, 7);
+//        squares[7][3].piece = new Queen(Color.black, 3, 7);
+//
+//        squares[6][4].piece = new Queen(Color.white, 4, 6);
+//        currentPlayer = Color.black;
+
         add(playingBoard);
         setVisible(true);
 
@@ -147,6 +155,9 @@ public class gameEngine extends JFrame {
         for (var moveList: legalMoves) {
             for (Coord move : moveList) {
                 squares[move.y][move.x].setBackground(Color.green);
+                if (squares[move.y][move.x].piece != null && squares[move.y][move.x].piece.color == currentPlayer) {
+                    squares[move.y][move.x].setBackground(Color.red);
+                }
             }
         }
         playingBoard.repaint();
@@ -197,13 +208,15 @@ public class gameEngine extends JFrame {
             }
         }
     }
+
     public static void virtualMove(Coord initPos, Coord finalPos) {
         if (virtualBoard[finalPos.y][finalPos.x] != null && virtualBoard[finalPos.y][finalPos.x].color == virtualBoard[initPos.y][initPos.x].color)
             return;
         virtualBoard[finalPos.y][finalPos.x] = virtualBoard[initPos.y][initPos.x];
         virtualBoard[initPos.y][initPos.x] = null;
     }
-    private static boolean isCheckMate() {
+
+    public static boolean isCheckMate() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer) {
@@ -222,6 +235,7 @@ public class gameEngine extends JFrame {
         selectedPiece = null;
         return true;
     }
+
     public static boolean isInCheck(Coord kingPos) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -237,6 +251,7 @@ public class gameEngine extends JFrame {
         }
         return false;
     }
+
     public static void endGame(int condition) {
         if (condition == CHECKMATE) {
             // end by checkmate
@@ -260,6 +275,7 @@ public class gameEngine extends JFrame {
         // disable everything, buttons, timers ....
         stopEverything();
     }
+
     private static void stopEverything() {
         blackTimer.pause();
         whiteTimer.pause();
@@ -269,6 +285,7 @@ public class gameEngine extends JFrame {
             }
         }
     }
+
     private static void castle(Coord initPos, Coord finalPos) {
         // add a new soundtrack for castling
         selectedPiece.hasMoved = true;
@@ -292,6 +309,7 @@ public class gameEngine extends JFrame {
         SoundEffect toPlay = new SoundEffect("move.wav");
         toPlay.play();
     }
+
     public static void main(String[] argv) {
         new gameEngine();
     }

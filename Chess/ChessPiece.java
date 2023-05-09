@@ -63,16 +63,23 @@ public abstract class ChessPiece {
         ArrayList<Coord> moves;
         for (var moveList: legalMoves) {
             moves = new ArrayList<>();
-            for (Coord coord : moveList) {
-                if (virtualBoard[coord.y][coord.x] != null && virtualBoard[coord.y][coord.x].color == this.color) {
-                    // skip this move if it's a bishop as it can jump
-                    // remove the rest of this direction otherwise
-                    if (this.getClass() == Bishop.class) {
-                        continue;
-                    }
+            for (int i = 0; i < moveList.size(); i++) {
+                moves.add(moveList.get(i));
+                if (virtualBoard[moveList.get(i).y][moveList.get(i).x] != null) {
+                    // remove the rest of the moves in this direction
+
+
+                    // these next changes kind of broke checkmate
+//            for (Coord coord : moveList) {
+//                if (virtualBoard[coord.y][coord.x] != null && virtualBoard[coord.y][coord.x].color == this.color) {
+//                    // skip this move if it's a bishop as it can jump
+//                    // remove the rest of this direction otherwise
+//                    if (this.getClass() == Bishop.class) {
+//                        continue;
+//                    }
                     break;
                 }
-                moves.add(coord);
+//                moves.add(coord);
             }
             toReturn.add(moves);
         }
@@ -124,7 +131,9 @@ class Pawn extends ChessPiece {
     public Pawn(Color color, int x, int y) {
         super(color, x, y);
         direction = color == Color.white ? -1 : 1;
+
     }
+
     @Override
     public ArrayList<ArrayList<Coord>> availableMoves() {
         ArrayList<ArrayList<Coord>> allMoves = new ArrayList<>();
@@ -180,6 +189,7 @@ class Rook extends ChessPiece {
         int[] dy = {1, -1, 0, 0};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy));
     }
+
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
@@ -204,6 +214,7 @@ class Knight extends ChessPiece {
         int[] dy = {2, 2, 3, 3, -3, -2, -3, -2};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
     }
+
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
@@ -241,8 +252,11 @@ class Bishop extends ChessPiece {
             toAdd.add(new Coord(newX, this.position.y));
             allMoves.add(toAdd);
         }
-        return filterAvailableMovesByState(allMoves);
+        return allMoves;
+
+//        return filterAvailableMovesByState(allMoves);
     }
+
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {
@@ -267,6 +281,7 @@ class Queen extends ChessPiece {
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy));
     }
+
     public ImageIcon getPieceIcon() {
         try {
             if (color == Color.black) {

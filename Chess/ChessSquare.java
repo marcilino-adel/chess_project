@@ -24,6 +24,7 @@ public class ChessSquare extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         setVirtualBoard();
+
         // set the selected piece if the square selected contains a piece of the right color
         if (selectedPiece == null) {
             if (this.piece != null && this.piece.color == currentPlayer) {
@@ -49,6 +50,7 @@ public class ChessSquare extends JButton implements ActionListener {
             return;
         }
 
+        // we get here if a piece is already selected, so we
         // search for this square in the selected piece's legal moves
         boolean found = false;
         for (int i = 0; i < legalMoves.size(); i++) {
@@ -56,6 +58,7 @@ public class ChessSquare extends JButton implements ActionListener {
             for (int j = 0; j < legalMoves.get(i).size(); j++) {
                 if (legalMoves.get(i).get(j).y == this.position.y && legalMoves.get(i).get(j).x == this.position.x) {
                     isCastling = false;
+                    // check if the move selected is the castle move
                     if (selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1) {
                         isCastling = true;
                     }
