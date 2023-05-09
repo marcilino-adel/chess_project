@@ -17,8 +17,8 @@ public class TheInterfaces implements ActionListener {
 
     private static JLayeredPane layeredPane;
     private static JLayeredPane layeredPane_for_users;
-    private static JTextField white_player;
-    private static JTextField black_player;
+    private static JTextField username;
+
 
 
     public static void main(String[] args) throws IOException {
@@ -29,9 +29,9 @@ public class TheInterfaces implements ActionListener {
         window.setSize(600, 600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception ignored) {}
+//        try {
+//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+//        } catch (Exception ignored) {}
 
         layeredPane = new JLayeredPane();
         layeredPane_for_users=new JLayeredPane();
@@ -45,35 +45,23 @@ public class TheInterfaces implements ActionListener {
         background2.setBounds(0, 0, 600, 600);
         layeredPane_for_users.add(background2,JLayeredPane.DEFAULT_LAYER);
         JLabel namelabel1=new JLabel();
-        JLabel namelabel2=new JLabel();
 
-        namelabel1.setText("BLACK PLAYER USERNAME :");
+
+        namelabel1.setText("PLAYER USERNAME :");
         namelabel1.setForeground(Color.black);
         namelabel1.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel1.setBounds(20, 50, 290, 50);
+        namelabel1.setBounds(20, 100, 290, 50);
         namelabel1.setOpaque(false);
         layeredPane_for_users.add(namelabel1, JLayeredPane.PALETTE_LAYER);
 
-        namelabel2.setText("WHITE PLAYER USERNAME :");
-        namelabel2.setForeground(Color.black);
-        namelabel2.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel2.setBounds(20, 400, 290, 50);
-        namelabel2.setOpaque(false);
-        layeredPane_for_users.add(namelabel2, JLayeredPane.PALETTE_LAYER);
 
-        white_player = new JTextField();
-        white_player.setBounds(310, 400, 200, 50);
-        white_player.setFont(new Font("normal", Font.BOLD, 20));
-        white_player.setOpaque(false);
-        white_player.setHorizontalAlignment(JTextField.CENTER);
-        layeredPane_for_users.add(white_player,JLayeredPane.PALETTE_LAYER);
+        username = new JTextField();
+        username.setBounds(250, 100, 230, 50);
+        username.setFont(new Font("normal", Font.BOLD, 20));
+        username.setOpaque(false);
+        username.setHorizontalAlignment(JTextField.CENTER);
+        layeredPane_for_users.add(username,JLayeredPane.PALETTE_LAYER);
 
-        black_player = new JTextField();
-        black_player.setBounds(310, 50, 200, 50);
-        black_player.setFont(new Font("normal", Font.BOLD, 20));
-        black_player.setOpaque(false);
-        black_player.setHorizontalAlignment(JTextField.CENTER);
-        layeredPane_for_users.add(black_player,JLayeredPane.PALETTE_LAYER);
 
         start=new JButton();
         start.setText("START");
@@ -82,7 +70,7 @@ public class TheInterfaces implements ActionListener {
 //        rapid.setForeground(Color.white);
         start.setForeground(Color.white);
         start.setBackground(new Color(75, 41, 2, 255));
-        start.setBounds(210, 200, 100, 50);
+        start.setBounds(210, 270, 100, 50);
         start.addActionListener(new TheInterfaces());
         layeredPane_for_users.add(start, JLayeredPane.PALETTE_LAYER);
 
@@ -102,10 +90,10 @@ public class TheInterfaces implements ActionListener {
         // make the buttons
         rapid = new JButton();
         JLabel title = new JLabel();
-        title.setText("Chess");
-        title.setForeground(Color.black);
-        title.setFont(new Font("Mv Boli", Font.BOLD, 50));
-        title.setBounds(200, 50, 200, 100);
+
+        title.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/chess label.png")).getScaledInstance(200,200,Image.SCALE_SMOOTH)));
+
+        title.setBounds(155, 20, 500, 200);
         title.setOpaque(false);
         layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
 
@@ -130,19 +118,19 @@ public void actionPerformed(ActionEvent e) {
         window.pack();
 
     } else if(e.getSource() == start) {
-        String whitePlayerName = white_player.getText();
-        String blackPlayerName = black_player.getText();
+        String whitePlayerName =username.getText();
+
         try {
             File file = new File("player_names.txt");
             FileWriter writer = new FileWriter(file);
-            writer.write(whitePlayerName + "\n" + blackPlayerName);
+            writer.write(whitePlayerName + "\n" );
             writer.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
 
-        if(whitePlayerName.isEmpty() || blackPlayerName.isEmpty()) {
+        if(whitePlayerName.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter names for both players");
         } else {
             window.dispose();
