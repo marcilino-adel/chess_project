@@ -121,12 +121,6 @@ public class gameEngine extends JFrame {
         playingBoard.repaint();
         toPlay.play();
 
-        // check for checkmate
-        setVirtualBoard();
-        if (isCheckMate()) {
-            endGame(CHECKMATE);
-        }
-
         // change timers
         if (currentPlayer == Color.white) {
             whiteTimer.unpause();
@@ -134,6 +128,12 @@ public class gameEngine extends JFrame {
         } else {
             whiteTimer.pause();
             blackTimer.unpause();
+        }
+
+        // check for checkmate
+        setVirtualBoard();
+        if (isCheckMate()) {
+            endGame(CHECKMATE);
         }
     }
 

@@ -25,7 +25,7 @@ public class MyTimer extends JLabel {
     }
 
     private void setTime() {
-        millisRemaining = TimeUnit.MINUTES.toMillis(1);
+        millisRemaining = TimeUnit.MINUTES.toMillis(10);
     }
 
     public void pause() {
