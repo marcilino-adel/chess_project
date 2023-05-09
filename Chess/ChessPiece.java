@@ -89,9 +89,9 @@ public abstract class ChessPiece {
 
                 // finding current player's king
                 boolean found = false;
-                for (int row = 0; row < boardSize; row++) {
+                for (int row = 0; row < BOARD_SIZE; row++) {
                     if (found) break;
-                    for (int col = 0; col < boardSize; col++) {
+                    for (int col = 0; col < BOARD_SIZE; col++) {
                         if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer && virtualBoard[row][col].getClass() == King.class) {
                             kingPos = new Coord(col, row);
                             found = true;

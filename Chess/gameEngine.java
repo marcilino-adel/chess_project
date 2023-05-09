@@ -2,15 +2,16 @@ package Chess;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 import java.util.ArrayList;
-import static Chess.TheInterfaces.*;
 
 
 import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
 public class gameEngine extends JFrame {
-    public static final int boardSize = 8;
+    public static final int CHECKMATE = 0;
+    public static final int TIMEOUT = 1;
+    public static final int STALEMATE = 2;
+    public static final int BOARD_SIZE = 8;
     public static Color currentPlayer = Color.white;
     public static ChessPiece selectedPiece;
     public static ArrayList<ArrayList<Coord>> legalMoves;
@@ -22,8 +23,8 @@ public class gameEngine extends JFrame {
     private static JPanel deadWhitePanel = new JPanel(new GridLayout(3, 5));
     private static JLabel[][] deadWhiteLabels = new JLabel[3][5];
     private static JLabel[][] deadBlackLabels = new JLabel[3][5];
-    public static ChessSquare[][] squares = new ChessSquare[boardSize][boardSize];
-    public static ChessPiece[][] virtualBoard = new ChessPiece[boardSize][boardSize];
+    public static ChessSquare[][] squares = new ChessSquare[BOARD_SIZE][BOARD_SIZE];
+    public static ChessPiece[][] virtualBoard = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
     public gameEngine() {
         setTitle("Chess Game");
@@ -34,12 +35,12 @@ public class gameEngine extends JFrame {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ignored) {}
 
-        GridLayout layout = new GridLayout(boardSize, boardSize);
+        GridLayout layout = new GridLayout(BOARD_SIZE, BOARD_SIZE);
         playingBoard = new JPanel(layout);
 
         // initialize board layout
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 squares[row][col] = new ChessSquare(col, row);
                 if ((row + col) % 2 != 0) {
                     squares[row][col].setBackground(Color.black);
@@ -123,11 +124,7 @@ public class gameEngine extends JFrame {
         // check for checkmate
         setVirtualBoard();
         if (isCheckMate()) {
-            if (currentPlayer == Color.white) {
-                System.out.println("Black wins");
-            } else {
-                System.out.println("White wins");
-            }
+            endGame(CHECKMATE);
         }
 
         // change timers
@@ -195,8 +192,8 @@ public class gameEngine extends JFrame {
 
     // These methods are used when checking for check and checkmate
     public static void setVirtualBoard() {
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 virtualBoard[row][col] = squares[row][col].piece;
             }
         }
@@ -208,8 +205,8 @@ public class gameEngine extends JFrame {
         virtualBoard[initPos.y][initPos.x] = null;
     }
     private static boolean isCheckMate() {
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer) {
                     selectedPiece = virtualBoard[row][col];
                     ArrayList<ArrayList<Coord>> availableMoves = selectedPiece.availableMoves();
@@ -227,8 +224,8 @@ public class gameEngine extends JFrame {
         return true;
     }
     public static boolean isInCheck(Coord kingPos) {
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 if (virtualBoard[row][col] != null && virtualBoard[row][col].color != currentPlayer) {
                     ArrayList<ArrayList<Coord>> moves = virtualBoard[row][col].availableMoves();
                     for (var list: moves) {
@@ -241,14 +238,38 @@ public class gameEngine extends JFrame {
         }
         return false;
     }
-    public static void endByTimeout() {
-        if (currentPlayer == Color.white) {
-            System.out.println("Black wins by timeout");
-        } else {
-            System.out.println("White wins by timeout");
+    public static void endGame(int condition) {
+        if (condition == CHECKMATE) {
+            // end by checkmate
+            if (currentPlayer == Color.white) {
+                JOptionPane.showMessageDialog(null, "Black wins by checkmate");
+            } else {
+                JOptionPane.showMessageDialog(null, "White wins by checkmate");
+            }
+        } else if (condition == TIMEOUT) {
+            // end by timeout
+            if (currentPlayer == Color.white) {
+                JOptionPane.showMessageDialog(null, "Black wins by timeout");
+            } else {
+                JOptionPane.showMessageDialog(null, "White wins by timeout");
+            }
+        } else if (condition == STALEMATE) {
+            // end by stalemate
+            JOptionPane.showMessageDialog(null, "STALEMATE, we're all winners here");
+        }
+        // call a method to
+        // disable everything, buttons, timers ....
+        stopEverything();
+    }
+    private static void stopEverything() {
+        blackTimer.pause();
+        whiteTimer.pause();
+        for (var row: squares) {
+            for (var square: row) {
+                square.setEnabled(false);
+            }
         }
     }
-
     public static void main(String[] argv) {
         new gameEngine();
     }

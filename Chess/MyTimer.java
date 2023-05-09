@@ -17,7 +17,7 @@ public class MyTimer extends JLabel {
             if (millisRemaining >= 0) {
                 updateLabel();
             } else {
-                gameEngine.endByTimeout();
+                gameEngine.endGame(gameEngine.TIMEOUT);
                 timer.stop();
             }
         });
