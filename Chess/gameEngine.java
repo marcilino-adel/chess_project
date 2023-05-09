@@ -225,4 +225,8 @@ public class gameEngine extends JFrame {
         }
         return false;
     }
+
+    public static void main(String[] argv) {
+        new gameEngine();
+    }
 }

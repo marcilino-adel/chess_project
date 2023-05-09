@@ -100,8 +100,6 @@ public abstract class ChessPiece {
                     }
                 }
 
-                // find if the king is in check after making said move
-                // if not then the move is valid and could be added to the returned list
                 valid = !isInCheck(kingPos);
 
                 setVirtualBoard();
@@ -224,7 +222,8 @@ class Bishop extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        ArrayList<ArrayList<Coord>> allMoves = filterAvailableMovesByState(findAvailableMoves(dx, dy, 3));
+        ArrayList<ArrayList<Coord>> allMoves = findAvailableMoves(dx, dy, 3);
+        // horizontal movement
         int newX = this.position.x + 1;
         if (newX >= 0 && newX <= 7) {
             // add (x, newY)

@@ -27,6 +27,12 @@ public class TheInterfaces implements ActionListener {
         window.setVisible(true);
         window.setLayout(null);
         window.setSize(600, 600);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception ignored) {}
+
         layeredPane = new JLayeredPane();
         layeredPane_for_users=new JLayeredPane();
         layeredPane_for_users.setPreferredSize(new Dimension(600,600));
