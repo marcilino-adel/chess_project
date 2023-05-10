@@ -1,5 +1,9 @@
 package Chess;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.*;
+import java.text.ParseException;
 
 public class TheInterfaces implements ActionListener {
 
@@ -18,7 +23,6 @@ public class TheInterfaces implements ActionListener {
     private static JLayeredPane layeredPane;
     private static JLayeredPane layeredPane_for_users;
     private static JTextField username;
-
 
 
     public static void main(String[] args) throws IOException {
@@ -34,17 +38,17 @@ public class TheInterfaces implements ActionListener {
 //        } catch (Exception ignored) {}
 
         layeredPane = new JLayeredPane();
-        layeredPane_for_users=new JLayeredPane();
-        layeredPane_for_users.setPreferredSize(new Dimension(600,600));
+        layeredPane_for_users = new JLayeredPane();
+        layeredPane_for_users.setPreferredSize(new Dimension(600, 600));
         layeredPane.setPreferredSize(new Dimension(600, 600));
-        JLabel background = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(),window.getHeight(),Image.SCALE_SMOOTH)));
-       background.setBounds(0, 0, 600, 600);
+        JLabel background = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(), window.getHeight(), Image.SCALE_SMOOTH)));
+        background.setBounds(0, 0, 600, 600);
         layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
         //make the second interface
-        JLabel background2=new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(),window.getHeight(),Image.SCALE_SMOOTH)));
+        JLabel background2 = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(), window.getHeight(), Image.SCALE_SMOOTH)));
         background2.setBounds(0, 0, 600, 600);
-        layeredPane_for_users.add(background2,JLayeredPane.DEFAULT_LAYER);
-        JLabel namelabel1=new JLabel();
+        layeredPane_for_users.add(background2, JLayeredPane.DEFAULT_LAYER);
+        JLabel namelabel1 = new JLabel();
 
 
         namelabel1.setText("PLAYER USERNAME :");
@@ -60,10 +64,10 @@ public class TheInterfaces implements ActionListener {
         username.setFont(new Font("normal", Font.BOLD, 20));
         username.setOpaque(false);
         username.setHorizontalAlignment(JTextField.CENTER);
-        layeredPane_for_users.add(username,JLayeredPane.PALETTE_LAYER);
+        layeredPane_for_users.add(username, JLayeredPane.PALETTE_LAYER);
 
 
-        start=new JButton();
+        start = new JButton();
         start.setText("START");
         start.setFont(new Font("comic sans", Font.BOLD, 20));
         start.setFocusable(false);
@@ -91,7 +95,7 @@ public class TheInterfaces implements ActionListener {
         rapid = new JButton();
         JLabel title = new JLabel();
 
-        title.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/chess label.png")).getScaledInstance(200,200,Image.SCALE_SMOOTH)));
+        title.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/chess label.png")).getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
 
         title.setBounds(155, 20, 500, 200);
         title.setOpaque(false);
@@ -101,7 +105,7 @@ public class TheInterfaces implements ActionListener {
         rapid.setText("Rapid");
         rapid.setFont(new Font("comic sans", Font.BOLD, 20));
         rapid.setFocusable(false);
-       rapid.setForeground(Color.white);
+        rapid.setForeground(Color.white);
         rapid.setBackground(new Color(75, 41, 2, 255));
         rapid.setBounds(210, 200, 100, 50);
         rapid.addActionListener(new TheInterfaces());
@@ -111,34 +115,56 @@ public class TheInterfaces implements ActionListener {
     }
 
 
-@Override
-public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == rapid) {
-        window.setContentPane(layeredPane_for_users);
-        window.pack();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == rapid) {
+            window.setContentPane(layeredPane_for_users);
+            window.pack();
 
-    } else if(e.getSource() == start) {
-        String whitePlayerName =username.getText();
+        } else if (e.getSource() == start) {
+//        String PlayerName =username.getText();
+//
+//        JSONParser parser = new JSONParser();
+//        try (FileReader fileReader = new FileReader("playerData.json")) {
+//            Object obj = parser.parse(fileReader);
+//            JSONArray namesArray = (JSONArray) obj;
+//            boolean found = false;
+//            // الآن يمكنك الوصول إلى القيم من خلال اسم المفتاح
+//
+//        } catch (IOException | org.json.simple.parser.ParseException c) {
+//            c.printStackTrace();
+//        }
+//
+//
+//
+//
+//        if(PlayerName.isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Please enter the username");
+//        } else {
+//            window.dispose();
+//            new gameEngine();
+//        }
+//    }
+            String playerName = username.getText();
 
-        try {
-            File file = new File("player_names.txt");
-            FileWriter writer = new FileWriter(file);
-            writer.write(whitePlayerName + "\n" );
-            writer.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            JSONParser parser = new JSONParser();
+
+            try (FileReader fileReader = new FileReader("playerData.json")) {
+                Object obj = parser.parse(fileReader);
+                JSONObject jsonObject = (JSONObject) obj;
+
+                if (jsonObject.containsKey(playerName)) {
+                    // يتم تنفيذ مهمة زر البدء هنا
+                    window.dispose();
+                    new gameEngine();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Player name not found");
+                }
+            } catch (IOException | org.json.simple.parser.ParseException c) {
+                c.printStackTrace();
+            }
         }
 
 
-        if(whitePlayerName.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter the username");
-        } else {
-            window.dispose();
-            new gameEngine();
-        }
     }
 }
-
-
-}
-
