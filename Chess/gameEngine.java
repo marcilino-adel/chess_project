@@ -29,7 +29,9 @@ public class gameEngine extends JFrame {
 
     public gameEngine() {
         setTitle("Chess Game");
-        setSize(600, 600);
+        //setSize(600, 600);
+        setResizable(false);
+        setBounds(320,50,900,700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         try {
@@ -109,7 +111,11 @@ public class gameEngine extends JFrame {
         informationPanel.add(whiteTimer);
         informationPanel.add(deadWhitePanel);
         informationPanel.add(whiteLabel);
+        informationPanel.setSize(300, 100);
         add(informationPanel, BorderLayout.EAST);
+
+        playingBoard.setSize(600, 600);
+
     }
 
     public static void movePiece(Coord initPos, Coord finalPos) {
