@@ -30,7 +30,9 @@ public class TheInterfaces implements ActionListener {
         rapid = new JButton();
         window.setVisible(true);
         window.setLayout(null);
-        window.setSize(600, 600);
+       // window.setSize(700, 700);
+        window.setResizable(false);
+        window.setBounds(320,50,900,700);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 //        try {
@@ -39,14 +41,14 @@ public class TheInterfaces implements ActionListener {
 
         layeredPane = new JLayeredPane();
         layeredPane_for_users = new JLayeredPane();
-        layeredPane_for_users.setPreferredSize(new Dimension(600, 600));
-        layeredPane.setPreferredSize(new Dimension(600, 600));
+        layeredPane_for_users.setPreferredSize(new Dimension(900, 700));
+        layeredPane.setPreferredSize(new Dimension(900, 700));
         JLabel background = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(), window.getHeight(), Image.SCALE_SMOOTH)));
-        background.setBounds(0, 0, 600, 600);
+        background.setBounds(0, 0, 900, 700);
         layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
         //make the second interface
         JLabel background2 = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(), window.getHeight(), Image.SCALE_SMOOTH)));
-        background2.setBounds(0, 0, 600, 600);
+        background2.setBounds(0, 0, 900, 700);
         layeredPane_for_users.add(background2, JLayeredPane.DEFAULT_LAYER);
         JLabel namelabel1 = new JLabel();
 
@@ -54,13 +56,13 @@ public class TheInterfaces implements ActionListener {
         namelabel1.setText("PLAYER USERNAME :");
         namelabel1.setForeground(Color.black);
         namelabel1.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel1.setBounds(20, 100, 290, 50);
+        namelabel1.setBounds(170, 100, 290, 50);
         namelabel1.setOpaque(false);
         layeredPane_for_users.add(namelabel1, JLayeredPane.PALETTE_LAYER);
 
 
         username = new JTextField();
-        username.setBounds(250, 100, 230, 50);
+        username.setBounds(400, 100, 230, 50);
         username.setFont(new Font("normal", Font.BOLD, 20));
         username.setOpaque(false);
         username.setHorizontalAlignment(JTextField.CENTER);
@@ -74,7 +76,7 @@ public class TheInterfaces implements ActionListener {
 //        rapid.setForeground(Color.white);
         start.setForeground(Color.white);
         start.setBackground(new Color(75, 41, 2, 255));
-        start.setBounds(210, 270, 100, 50);
+        start.setBounds(390, 270, 100, 50);
         start.addActionListener(new TheInterfaces());
         layeredPane_for_users.add(start, JLayeredPane.PALETTE_LAYER);
 
@@ -97,7 +99,7 @@ public class TheInterfaces implements ActionListener {
 
         title.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/chess label.png")).getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
 
-        title.setBounds(155, 20, 500, 200);
+        title.setBounds(340, 20, 500, 200);
         title.setOpaque(false);
         layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
 
@@ -107,7 +109,7 @@ public class TheInterfaces implements ActionListener {
         rapid.setFocusable(false);
         rapid.setForeground(Color.white);
         rapid.setBackground(new Color(75, 41, 2, 255));
-        rapid.setBounds(210, 200, 100, 50);
+        rapid.setBounds(385, 200, 100, 50);
         rapid.addActionListener(new TheInterfaces());
         layeredPane.add(rapid, JLayeredPane.PALETTE_LAYER);
         window.setContentPane(layeredPane);
@@ -136,7 +138,7 @@ public class TheInterfaces implements ActionListener {
                     window.dispose();
                     new gameEngine();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Player name not found");
+                    JOptionPane.showMessageDialog(null, "INVALID USERNAME");
                 }
             } catch (IOException | org.json.simple.parser.ParseException c) {
                 c.printStackTrace();
