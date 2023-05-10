@@ -106,10 +106,10 @@ public class gameEngine extends JFrame {
             }
         }
         informationPanel.add(blackLabel);
-        informationPanel.add(deadBlackPanel);
+        informationPanel.add(deadWhitePanel);
         informationPanel.add(blackTimer);
         informationPanel.add(whiteTimer);
-        informationPanel.add(deadWhitePanel);
+        informationPanel.add(deadBlackPanel);
         informationPanel.add(whiteLabel);
         informationPanel.setSize(300, 100);
         add(informationPanel, BorderLayout.EAST);
@@ -130,16 +130,19 @@ public class gameEngine extends JFrame {
                 toPlay = new SoundEffect("capture.wav");
             } else toPlay = new SoundEffect("move.wav");
             selectedPiece.hasMoved = true;
-            squares[finalPos.y][finalPos.x].piece = selectedPiece;
             selectedPiece.position = finalPos;
+            squares[finalPos.y][finalPos.x].piece = selectedPiece;
             squares[initPos.y][initPos.x].piece = null;
             toPlay.play();
+        }
+        playingBoard.revalidate();
+        playingBoard.repaint();
+        if (selectedPiece instanceof Pawn) {
+            promotePawn();
         }
         deColorAvailableMoves();
         selectedPiece = null;
         currentPlayer = currentPlayer == Color.black ? Color.white : Color.black;
-        playingBoard.revalidate();
-        playingBoard.repaint();
 
         // change timers
         if (currentPlayer == Color.white) {
@@ -186,8 +189,8 @@ public class gameEngine extends JFrame {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 5; col++) {
                 if (currentPlayer == Color.white) {
-                    if (deadBlackLabels[row][col].getIcon() == null) {
-                        deadBlackLabels[row][col].setIcon(new ImageIcon(resizedIcon));
+                    if (deadBlackLabels[2 - row][col].getIcon() == null) {
+                        deadBlackLabels[2 - row][col].setIcon(new ImageIcon(resizedIcon));
                         found = true;
                         break;
                     }
@@ -204,7 +207,28 @@ public class gameEngine extends JFrame {
     }
 
     private static void promotePawn() {
-
+        int pawnY = selectedPiece.color != Color.white ? 7 : 0;
+        if (selectedPiece.position.y == pawnY) {
+            // make the user select the piece to be promoted to
+            Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
+            int selection = JOptionPane.showOptionDialog(
+                    null,
+                    "Choose a piece to promote to:",
+                    "Promotion",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            if (selection == 0)
+                squares[selectedPiece.position.y][selectedPiece.position.x].piece = new Queen(selectedPiece.color, selectedPiece.position.x, selectedPiece.position.y);
+            else if (selection == 1)
+                squares[selectedPiece.position.y][selectedPiece.position.x].piece = new Rook(selectedPiece.color, selectedPiece.position.x, selectedPiece.position.y);
+            else if (selection == 2)
+                squares[selectedPiece.position.y][selectedPiece.position.x].piece = new Bishop(selectedPiece.color, selectedPiece.position.x, selectedPiece.position.y);
+            else
+                squares[selectedPiece.position.y][selectedPiece.position.x].piece = new Knight(selectedPiece.color, selectedPiece.position.x, selectedPiece.position.y);
+        }
     }
 
     public static void setVirtualBoard() {
