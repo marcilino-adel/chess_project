@@ -122,29 +122,7 @@ public class TheInterfaces implements ActionListener {
             window.pack();
 
         } else if (e.getSource() == start) {
-//        String PlayerName =username.getText();
-//
-//        JSONParser parser = new JSONParser();
-//        try (FileReader fileReader = new FileReader("playerData.json")) {
-//            Object obj = parser.parse(fileReader);
-//            JSONArray namesArray = (JSONArray) obj;
-//            boolean found = false;
-//            // الآن يمكنك الوصول إلى القيم من خلال اسم المفتاح
-//
-//        } catch (IOException | org.json.simple.parser.ParseException c) {
-//            c.printStackTrace();
-//        }
-//
-//
-//
-//
-//        if(PlayerName.isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "Please enter the username");
-//        } else {
-//            window.dispose();
-//            new gameEngine();
-//        }
-//    }
+
             String playerName = username.getText();
 
             JSONParser parser = new JSONParser();
@@ -153,7 +131,7 @@ public class TheInterfaces implements ActionListener {
                 Object obj = parser.parse(fileReader);
                 JSONObject jsonObject = (JSONObject) obj;
 
-                if (jsonObject.containsKey(playerName)) {
+                if (jsonObject.containsValue(playerName)) {
                     // يتم تنفيذ مهمة زر البدء هنا
                     window.dispose();
                     new gameEngine();
