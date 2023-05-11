@@ -48,7 +48,8 @@ import javax.swing.*;
 import java.util.concurrent.TimeUnit;
 
 public class MyTimer extends JLabel {
-    private static int count = 1;
+    private static int count = 0;
+    private static String timeSet;
     private Timer timer;
     private long millisRemaining;
     private boolean paused = true;
@@ -70,14 +71,20 @@ public class MyTimer extends JLabel {
     }
 
     private void setTime() {
-
-        String input = JOptionPane.showInputDialog(null, "Enter time allowed for player " + count + " :", "Set Timer", JOptionPane.QUESTION_MESSAGE);
+        if (timeSet != null) {
+            int minutes = Integer.parseInt(timeSet);
+            millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
+            return;
+        }
+        String input = JOptionPane.showInputDialog(null, "Enter time allowed for each player :", "Set Timer", JOptionPane.QUESTION_MESSAGE);
         count++;
         try {
             int minutes = Integer.parseInt(input);
+            timeSet = input;
             millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid input. Using default time: 3 minutes.");
+            timeSet = "3";
             millisRemaining = TimeUnit.MINUTES.toMillis(3);
         }
     }

@@ -1,6 +1,5 @@
 package Chess;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -14,8 +13,6 @@ import java.awt.event.ComponentEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.util.Set;
 
 public class TheInterfaces implements ActionListener {
 
@@ -34,14 +31,9 @@ public class TheInterfaces implements ActionListener {
         rapid = new JButton();
         window.setVisible(true);
         window.setLayout(null);
-       // window.setSize(700, 700);
         window.setResizable(false);
         window.setBounds(320,50,900,700);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-//        try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//        } catch (Exception ignored) {}
 
         layeredPane = new JLayeredPane();
         layeredPane_for_users = new JLayeredPane();
