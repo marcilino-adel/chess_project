@@ -1,1 +1,14 @@
-{"name":"mohamed"}
+{
+  "User1": {
+    "username" :"Ibrahim",
+    "password" :"password"
+  },
+  "User2": {
+    "username" :"Mohammed",
+    "password" :"notpassword"
+  },
+  "User3": {
+    "username" :"Mazen",
+    "password" :"1234"
+  }
+}

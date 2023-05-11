@@ -12,7 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.Set;
 
 public class TheInterfaces implements ActionListener {
 
@@ -23,6 +26,7 @@ public class TheInterfaces implements ActionListener {
     private static JLayeredPane layeredPane;
     private static JLayeredPane layeredPane_for_users;
     private static JTextField username;
+    private static JPasswordField password;
 
 
     public static void main(String[] args) throws IOException {
@@ -51,14 +55,20 @@ public class TheInterfaces implements ActionListener {
         background2.setBounds(0, 0, 900, 700);
         layeredPane_for_users.add(background2, JLayeredPane.DEFAULT_LAYER);
         JLabel namelabel1 = new JLabel();
-
-
         namelabel1.setText("PLAYER USERNAME :");
         namelabel1.setForeground(Color.black);
         namelabel1.setFont(new Font("normal", Font.BOLD, 20));
         namelabel1.setBounds(170, 100, 290, 50);
         namelabel1.setOpaque(false);
         layeredPane_for_users.add(namelabel1, JLayeredPane.PALETTE_LAYER);
+        ////
+        JLabel namelabel2 = new JLabel();
+        namelabel2.setText("PASSWORD :");
+        namelabel2.setForeground(Color.black);
+        namelabel2.setFont(new Font("normal", Font.BOLD, 20));
+        namelabel2.setBounds(250, 200, 290, 50);
+        namelabel2.setOpaque(false);
+        layeredPane_for_users.add(namelabel2, JLayeredPane.PALETTE_LAYER);
 
 
         username = new JTextField();
@@ -68,6 +78,16 @@ public class TheInterfaces implements ActionListener {
         username.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(username, JLayeredPane.PALETTE_LAYER);
 
+        password=new JPasswordField();
+        password.setBounds(400,200,230,50);
+        password.setFont(new Font("normal", Font.BOLD, 20));
+        password.setOpaque(false);
+        password.setHorizontalAlignment(JTextField.CENTER);
+        layeredPane_for_users.add(password, JLayeredPane.PALETTE_LAYER);
+
+
+
+
 
         start = new JButton();
         start.setText("START");
@@ -76,7 +96,7 @@ public class TheInterfaces implements ActionListener {
 //        rapid.setForeground(Color.white);
         start.setForeground(Color.white);
         start.setBackground(new Color(75, 41, 2, 255));
-        start.setBounds(390, 270, 100, 50);
+        start.setBounds(390, 320, 100, 50);
         start.addActionListener(new TheInterfaces());
         layeredPane_for_users.add(start, JLayeredPane.PALETTE_LAYER);
 
@@ -126,23 +146,36 @@ public class TheInterfaces implements ActionListener {
         } else if (e.getSource() == start) {
 
             String playerName = username.getText();
+            String playerPassword=password.getText();
 
             JSONParser parser = new JSONParser();
+            try {
+                String jsonContent = new String(Files.readAllBytes(Paths.get("playerData.json")));
+                JSONObject data = (JSONObject) parser.parse(jsonContent);
+                boolean found=false;
 
-            try (FileReader fileReader = new FileReader("playerData.json")) {
-                Object obj = parser.parse(fileReader);
-                JSONObject jsonObject = (JSONObject) obj;
-
-                if (jsonObject.containsValue(playerName)) {
-                    // يتم تنفيذ مهمة زر البدء هنا
+                for (Object keyObj : data.keySet()) {
+                    String key = (String) keyObj;
+                    JSONObject user = (JSONObject) data.get(key);
+                    String username = (String) user.get("username");
+                    String password = (String) user.get("password");
+                    if (playerName.equals(username)&&playerPassword.equals(password)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if(found){
                     window.dispose();
                     new gameEngine();
-                } else {
-                    JOptionPane.showMessageDialog(null, "INVALID USERNAME");
                 }
-            } catch (IOException | org.json.simple.parser.ParseException c) {
+                else
+                    JOptionPane.showMessageDialog(null, "INVALID USERNAME AND PASSWORD");
+
+            } catch (Exception c) {
                 c.printStackTrace();
             }
+
+
         }
 
 
