@@ -12,26 +12,26 @@ import static Chess.gameEngine.*;
 public abstract class ChessPiece {
     protected final int iconSize = 50;
     public Color color;
-    public Coord position;
+    public Coordinate position;
     public boolean hasMoved;
     public ChessPiece(Color color, int x, int y) {
         this.color = color;
-        this.position = new Coord(x, y);
+        this.position = new Coordinate(x, y);
         this.hasMoved = false;
     }
 
-    public abstract ArrayList<ArrayList<Coord>> availableMoves();
+    public abstract ArrayList<ArrayList<Coordinate>> availableMoves();
 
     public abstract ImageIcon getPieceIcon();
 
-    protected ArrayList<ArrayList<Coord>> findAvailableMoves(int[] deltaX, int[] deltaY) {
-        ArrayList<ArrayList<Coord>> allMoves = new ArrayList<>();
+    protected ArrayList<ArrayList<Coordinate>> findAvailableMoves(int[] deltaX, int[] deltaY) {
+        ArrayList<ArrayList<Coordinate>> allMoves = new ArrayList<>();
         for (int i = 0; i < deltaX.length; i++) {
-            ArrayList<Coord> movesInDirection = new ArrayList<>();
+            ArrayList<Coordinate> movesInDirection = new ArrayList<>();
             int newX = this.position.x + deltaX[i];
             int newY = this.position.y + deltaY[i];
             while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0) {
-                movesInDirection.add(new Coord(newX, newY));
+                movesInDirection.add(new Coordinate(newX, newY));
                 newX += deltaX[i];
                 newY += deltaY[i];
             }
@@ -40,15 +40,15 @@ public abstract class ChessPiece {
         return allMoves;
     }
 
-    protected ArrayList<ArrayList<Coord>> findAvailableMoves(int[] deltaX, int[] deltaY, int limit) {
-        ArrayList<ArrayList<Coord>> allMoves = new ArrayList<>();
+    protected ArrayList<ArrayList<Coordinate>> findAvailableMoves(int[] deltaX, int[] deltaY, int limit) {
+        ArrayList<ArrayList<Coordinate>> allMoves = new ArrayList<>();
         for (int i = 0; i < deltaX.length; i++) {
-            ArrayList<Coord> movesInDirection = new ArrayList<>();
+            ArrayList<Coordinate> movesInDirection = new ArrayList<>();
             int newX = this.position.x + deltaX[i];
             int newY = this.position.y + deltaY[i];
             int count = 0;
             while (newY <= 7 && newY >= 0 && newX <= 7 && newX >= 0 && count < limit) {
-                movesInDirection.add(new Coord(newX, newY));
+                movesInDirection.add(new Coordinate(newX, newY));
                 newX += deltaX[i];
                 newY += deltaY[i];
                 count++;
@@ -58,44 +58,32 @@ public abstract class ChessPiece {
         return allMoves;
     }
 
-    protected ArrayList<ArrayList<Coord>> filterAvailableMovesByState(ArrayList<ArrayList<Coord>> legalMoves) {
-        ArrayList<ArrayList<Coord>> toReturn = new ArrayList<>();
-        ArrayList<Coord> moves;
+    protected ArrayList<ArrayList<Coordinate>> filterAvailableMovesByState(ArrayList<ArrayList<Coordinate>> legalMoves) {
+        ArrayList<ArrayList<Coordinate>> toReturn = new ArrayList<>();
+        ArrayList<Coordinate> moves;
         for (var moveList: legalMoves) {
             moves = new ArrayList<>();
-            for (int i = 0; i < moveList.size(); i++) {
-                moves.add(moveList.get(i));
-                if (virtualBoard[moveList.get(i).y][moveList.get(i).x] != null) {
-                    // remove the rest of the moves in this direction
-
-
-                    // these next changes kind of broke checkmate
-//            for (Coord coord : moveList) {
-//                if (virtualBoard[coord.y][coord.x] != null && virtualBoard[coord.y][coord.x].color == this.color) {
-//                    // skip this move if it's a bishop as it can jump
-//                    // remove the rest of this direction otherwise
-//                    if (this.getClass() == Bishop.class) {
-//                        continue;
-//                    }
+            for (Coordinate coordinate : moveList) {
+                moves.add(coordinate);
+                if (virtualBoard[coordinate.y][coordinate.x] != null) {
                     break;
                 }
-//                moves.add(coord);
             }
             toReturn.add(moves);
         }
         return toReturn;
     }
 
-    public static ArrayList<ArrayList<Coord>> filterAvailableMovesByCheck(ArrayList<ArrayList<Coord>> legalMoves) {
-        Coord kingPos = null;
+    public static ArrayList<ArrayList<Coordinate>> filterAvailableMovesByCheck(ArrayList<ArrayList<Coordinate>> legalMoves) {
+        Coordinate kingPos = null;
 
-        ArrayList<ArrayList<Coord>> toReturn = new ArrayList<>();
+        ArrayList<ArrayList<Coordinate>> toReturn = new ArrayList<>();
 
         // removing all moves for the selected piece if it results in a check after the move
         for (var moveList: legalMoves) {
-            ArrayList<Coord> directionToReturn = new ArrayList<>();
-            for (Coord move: moveList) {
-                boolean valid = true;
+            ArrayList<Coordinate> directionToReturn = new ArrayList<>();
+            for (Coordinate move: moveList) {
+                boolean valid;
                 virtualMove(selectedPiece.position, move);
 
                 // finding current player's king
@@ -104,7 +92,7 @@ public abstract class ChessPiece {
                     if (found) break;
                     for (int col = 0; col < BOARD_SIZE; col++) {
                         if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer && virtualBoard[row][col].getClass() == King.class) {
-                            kingPos = new Coord(col, row);
+                            kingPos = new Coordinate(col, row);
                             found = true;
                             break;
                         }
@@ -135,13 +123,13 @@ class Pawn extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
-        ArrayList<ArrayList<Coord>> allMoves = new ArrayList<>();
-        ArrayList<Coord> moves = new ArrayList<>();
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
+        ArrayList<ArrayList<Coordinate>> allMoves = new ArrayList<>();
+        ArrayList<Coordinate> moves = new ArrayList<>();
         if (position.y + direction >= 0 && position.y + direction <= 7)
-            moves.add(new Coord(position.x, position.y + direction));
+            moves.add(new Coordinate(position.x, position.y + direction));
         if (!this.hasMoved) {
-            moves.add(new Coord(position.x, position.y + 2 * direction));
+            moves.add(new Coordinate(position.x, position.y + 2 * direction));
         }
         allMoves.add(moves);
         int newX = position.x + 1;
@@ -149,7 +137,7 @@ class Pawn extends ChessPiece {
         moves = new ArrayList<>();
         if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7) {
             if (squares[newY][newX].piece != null && squares[newY][newX].piece.color != this.color) {
-                moves.add(new Coord(newX, newY));
+                moves.add(new Coordinate(newX, newY));
                 allMoves.add(moves);
             }
 
@@ -158,7 +146,7 @@ class Pawn extends ChessPiece {
         newX = position.x - 1;
         if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7) {
             if (squares[newY][newX].piece != null && squares[newY][newX].piece.color != this.color) {
-                moves.add(new Coord(newX, newY));
+                moves.add(new Coordinate(newX, newY));
                 allMoves.add(moves);
             }
         }
@@ -185,7 +173,7 @@ class Rook extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy));
@@ -210,7 +198,7 @@ class Knight extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
         int[] dx = {3, -3, 2, -2, 2, 3, -2, -3};
         int[] dy = {2, 2, 3, 3, -3, -2, -3, -2};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
@@ -235,22 +223,22 @@ class Bishop extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
         int[] dx = {1, -1, 1, -1};
         int[] dy = {1, 1, -1, -1};
-        ArrayList<ArrayList<Coord>> allMoves = findAvailableMoves(dx, dy, 3);
+        ArrayList<ArrayList<Coordinate>> allMoves = findAvailableMoves(dx, dy, 3);
         // horizontal movement
         int newX = this.position.x + 1;
         if (newX >= 0 && newX <= 7) {
             // add (x, newY)
-            ArrayList<Coord> toAdd = new ArrayList<>();
-            toAdd.add(new Coord(newX, this.position.y));
+            ArrayList<Coordinate> toAdd = new ArrayList<>();
+            toAdd.add(new Coordinate(newX, this.position.y));
             allMoves.add(toAdd);
         }
         newX = this.position.x - 1;
         if (newX >= 0 && newX <= 7) {
-            ArrayList<Coord> toAdd = new ArrayList<>();
-            toAdd.add(new Coord(newX, this.position.y));
+            ArrayList<Coordinate> toAdd = new ArrayList<>();
+            toAdd.add(new Coordinate(newX, this.position.y));
             allMoves.add(toAdd);
         }
         return allMoves;
@@ -277,7 +265,7 @@ class Queen extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1,-1, 0, 0, 1, -1, 1, -1};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy));
@@ -302,14 +290,14 @@ class King extends ChessPiece {
     }
 
     @Override
-    public ArrayList<ArrayList<Coord>> availableMoves() {
+    public ArrayList<ArrayList<Coordinate>> availableMoves() {
         int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
         int[] dy = {1, -1, 0, 0, 1, -1, 1, -1};
         return filterAvailableMovesByState(findAvailableMoves(dx, dy, 1));
     }
 
-    public ArrayList<Coord> castlingMoves() {
-        ArrayList<Coord> toReturn = new ArrayList<>();
+    public ArrayList<Coordinate> castlingMoves() {
+        ArrayList<Coordinate> toReturn = new ArrayList<>();
         if (!this.hasMoved && !isInCheck(this.position)) { // && not in check
             int[] rookDx = {-1, 1};
             for (int direction: rookDx) {
@@ -325,15 +313,15 @@ class King extends ChessPiece {
                         }
                         if (count < 2) {
                             count++;
-                            virtualMove(this.position, new Coord(j, this.position.y));
-                            if (isInCheck(new Coord(j, this.position.y))) {
+                            virtualMove(this.position, new Coordinate(j, this.position.y));
+                            if (isInCheck(new Coordinate(j, this.position.y))) {
                                 valid = false;
                                 break;
                             }
                         }
                     }
                     if (valid) {
-                        toReturn.add(new Coord(this.position.x + 2 * direction, this.position.y));
+                        toReturn.add(new Coordinate(this.position.x + 2 * direction, this.position.y));
                     }
                 }
             }

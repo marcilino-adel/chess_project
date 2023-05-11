@@ -9,10 +9,10 @@ import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
 public class ChessSquare extends JButton implements ActionListener {
     public ChessPiece piece;
-    public Coord position;
+    public Coordinate position;
 
     public ChessSquare(int x, int y) {
-        this.position = new Coord(x, y);
+        this.position = new Coordinate(x, y);
        this.addActionListener(this);
     }
 
@@ -57,11 +57,8 @@ public class ChessSquare extends JButton implements ActionListener {
             if (found) break;
             for (int j = 0; j < legalMoves.get(i).size(); j++) {
                 if (legalMoves.get(i).get(j).y == this.position.y && legalMoves.get(i).get(j).x == this.position.x) {
-                    isCastling = false;
                     // check if the move selected is the castle move
-                    if (selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1) {
-                        isCastling = true;
-                    }
+                    isCastling = selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1;
                     found = true;
                     break;
                 }

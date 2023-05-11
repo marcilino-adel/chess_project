@@ -1,7 +1,11 @@
 package Chess;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -15,28 +19,39 @@ public class gameEngine extends JFrame {
     public static final int BOARD_SIZE = 8;
     public static Color currentPlayer = Color.white;
     public static ChessPiece selectedPiece;
-    public static ArrayList<ArrayList<Coord>> legalMoves;
+    public static ArrayList<ArrayList<Coordinate>> legalMoves;
     public static JPanel playingBoard;
     public static JPanel informationPanel;
-    private static MyTimer blackTimer = new MyTimer();
-    private static MyTimer whiteTimer = new MyTimer();
-    private static JPanel deadBlackPanel = new JPanel(new GridLayout(3, 5));
-    private static JPanel deadWhitePanel = new JPanel(new GridLayout(3, 5));
-    private static JLabel[][] deadWhiteLabels = new JLabel[3][5];
-    private static JLabel[][] deadBlackLabels = new JLabel[3][5];
+    private static final MyTimer blackTimer = new MyTimer();
+    private static final MyTimer whiteTimer = new MyTimer();
+    private static final JPanel deadBlackPanel = new JPanel(new GridLayout(3, 5));
+    private static final JPanel deadWhitePanel = new JPanel(new GridLayout(3, 5));
+    private static final JLabel[][] deadWhiteLabels = new JLabel[3][5];
+    private static final JLabel[][] deadBlackLabels = new JLabel[3][5];
+    private static final JLayeredPane layeredPane = new JLayeredPane();
     public static ChessSquare[][] squares = new ChessSquare[BOARD_SIZE][BOARD_SIZE];
     public static ChessPiece[][] virtualBoard = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
     public gameEngine() {
         setTitle("Chess Game");
-        //setSize(600, 600);
         setResizable(false);
-        setBounds(320,50,900,700);
+        setLayout(null);
+        setSize(900, 672);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        blackTimer.setForeground(Color.white);
+        whiteTimer.setForeground(Color.black);
+
+        JLabel background = new JLabel();
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            background.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/mainBoardBg.png"))));
         } catch (Exception ignored) {}
+        background.setBounds(0, 0, getWidth(), getHeight());
+
+        layeredPane.setBounds(0, -15, getWidth(), getHeight());
+        layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.setBackground(Color.red);
 
         GridLayout layout = new GridLayout(BOARD_SIZE, BOARD_SIZE);
         playingBoard = new JPanel(layout);
@@ -45,11 +60,13 @@ public class gameEngine extends JFrame {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 squares[row][col] = new ChessSquare(col, row);
-                if ((row + col) % 2 != 0) {
-                    squares[row][col].setBackground(Color.black);
-                } else {
-                    squares[row][col].setBackground(Color.white);
-                }
+//                if ((row + col) % 2 != 0) {
+//                    squares[row][col].setBackground(Color.black);
+//                } else {
+//                    squares[row][col].setBackground(Color.white);
+//                }
+                squares[row][col].setBackground(new Color(2, 2, 2));
+                squares[row][col].setOpaque(false);
                 playingBoard.add(squares[row][col]);
                if (row == 1)
                    squares[row][col].piece=new Pawn(Color.black,col,row);
@@ -80,22 +97,12 @@ public class gameEngine extends JFrame {
 
             }
         }
-
-        // used for testing
-//        squares[7][4].piece = new King(Color.black, 4, 7);
-//        squares[7][5].piece = new Bishop(Color.black, 5, 7);
-//        squares[7][3].piece = new Queen(Color.black, 3, 7);
-//
-//        squares[6][4].piece = new Queen(Color.white, 4, 6);
-//        currentPlayer = Color.black;
-
-        add(playingBoard);
-        setVisible(true);
+        playingBoard.setPreferredSize(new Dimension(593, getHeight()));
+        playingBoard.setOpaque(false);
+        playingBoard.setBorder(new EmptyBorder(66, 50, 64, 0));
 
         // initialize information panel
         informationPanel = new JPanel(new GridLayout(6, 1));
-        JLabel blackLabel = new JLabel("player 1");
-        JLabel whiteLabel = new JLabel("Player 2");
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 5; col++) {
@@ -105,20 +112,25 @@ public class gameEngine extends JFrame {
                 deadBlackPanel.add(deadBlackLabels[row][col]);
             }
         }
-        informationPanel.add(blackLabel);
         informationPanel.add(deadWhitePanel);
         informationPanel.add(blackTimer);
         informationPanel.add(whiteTimer);
         informationPanel.add(deadBlackPanel);
-        informationPanel.add(whiteLabel);
-        informationPanel.setSize(300, 100);
-        add(informationPanel, BorderLayout.EAST);
+        informationPanel.setOpaque(false);
+
+        JPanel bothPanels = new JPanel(new BorderLayout(28, 0));
+        bothPanels.setBounds(0, 0, getWidth(), getHeight());
+        bothPanels.add(playingBoard, BorderLayout.WEST);
+        bothPanels.add(informationPanel, BorderLayout.EAST);
+        bothPanels.setOpaque(false);
+        layeredPane.add(bothPanels, JLayeredPane.PALETTE_LAYER);
 
         playingBoard.setSize(600, 600);
-
+        add(layeredPane);
+        setVisible(true);
     }
 
-    public static void movePiece(Coord initPos, Coord finalPos) {
+    public static void movePiece(Coordinate initPos, Coordinate finalPos) {
         // moves the piece, updates the board, checks for checkmate, changes the current player and plays a sound effect
         if (isCastling) {
             // call castling move method
@@ -162,10 +174,10 @@ public class gameEngine extends JFrame {
 
     public static void colorAvailableMoves() {
         for (var moveList: legalMoves) {
-            for (Coord move : moveList) {
-                squares[move.y][move.x].setBackground(Color.green);
+            for (Coordinate move : moveList) {
+                squares[move.y][move.x].setBorder(new LineBorder(Color.green, 2, true));
                 if (squares[move.y][move.x].piece != null && squares[move.y][move.x].piece.color == currentPlayer) {
-                    squares[move.y][move.x].setBackground(Color.red);
+                    squares[move.y][move.x].setBorder(new LineBorder(Color.red, 2, true));
                 }
             }
         }
@@ -175,14 +187,15 @@ public class gameEngine extends JFrame {
 
     public static void deColorAvailableMoves() {
         for (var moveList: legalMoves) {
-            for (Coord move : moveList) {
-                squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
+            for (Coordinate move : moveList) {
+//                squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
+                squares[move.y][move.x].setBorder(null);
             }
         }
         legalMoves = null;
     }
 
-    private static void killPiece(Coord finalPos) {
+    private static void killPiece(Coordinate finalPos) {
         boolean found = false;
         Image icon = squares[finalPos.y][finalPos.x].piece.getPieceIcon().getImage();
         Image resizedIcon = icon.getScaledInstance(20, 30, Image.SCALE_SMOOTH);
@@ -239,7 +252,7 @@ public class gameEngine extends JFrame {
         }
     }
 
-    public static void virtualMove(Coord initPos, Coord finalPos) {
+    public static void virtualMove(Coordinate initPos, Coordinate finalPos) {
         if (virtualBoard[finalPos.y][finalPos.x] != null && virtualBoard[finalPos.y][finalPos.x].color == virtualBoard[initPos.y][initPos.x].color)
             return;
         virtualBoard[finalPos.y][finalPos.x] = virtualBoard[initPos.y][initPos.x];
@@ -251,7 +264,7 @@ public class gameEngine extends JFrame {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if (virtualBoard[row][col] != null && virtualBoard[row][col].color == currentPlayer) {
                     selectedPiece = virtualBoard[row][col];
-                    ArrayList<ArrayList<Coord>> availableMoves = selectedPiece.availableMoves();
+                    ArrayList<ArrayList<Coordinate>> availableMoves = selectedPiece.availableMoves();
                     availableMoves = filterAvailableMovesByCheck(availableMoves);
                     for (var list: availableMoves) {
                         if (list.size() != 0) {
@@ -266,11 +279,11 @@ public class gameEngine extends JFrame {
         return true;
     }
 
-    public static boolean isInCheck(Coord kingPos) {
+    public static boolean isInCheck(Coordinate kingPos) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if (virtualBoard[row][col] != null && virtualBoard[row][col].color != currentPlayer) {
-                    ArrayList<ArrayList<Coord>> moves = virtualBoard[row][col].availableMoves();
+                    ArrayList<ArrayList<Coordinate>> moves = virtualBoard[row][col].availableMoves();
                     for (var list: moves) {
                         for (var move: list) {
                             if (move.y == kingPos.y && move.x == kingPos.x) return true;
@@ -316,7 +329,7 @@ public class gameEngine extends JFrame {
         }
     }
 
-    private static void castle(Coord initPos, Coord finalPos) {
+    private static void castle(Coordinate initPos, Coordinate finalPos) {
         // add a new soundtrack for castling
         selectedPiece.hasMoved = true;
         squares[finalPos.y][finalPos.x].piece = selectedPiece;
@@ -326,13 +339,13 @@ public class gameEngine extends JFrame {
             // king side castling
             squares[finalPos.y][5].piece = squares[finalPos.y][7].piece;
             squares[finalPos.y][7].piece = null;
-            squares[finalPos.y][5].piece.position = new Coord(5, finalPos.y);
+            squares[finalPos.y][5].piece.position = new Coordinate(5, finalPos.y);
             squares[finalPos.y][5].piece.hasMoved = true;
         } else {
             // queen side castling
             squares[finalPos.y][3].piece = squares[finalPos.y][0].piece;
             squares[finalPos.y][0].piece = null;
-            squares[finalPos.y][3].piece.position = new Coord(3, finalPos.y);
+            squares[finalPos.y][3].piece.position = new Coordinate(3, finalPos.y);
             squares[finalPos.y][3].piece.hasMoved = true;
         }
 
