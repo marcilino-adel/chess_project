@@ -138,7 +138,8 @@ class Pawn extends ChessPiece {
     public ArrayList<ArrayList<Coord>> availableMoves() {
         ArrayList<ArrayList<Coord>> allMoves = new ArrayList<>();
         ArrayList<Coord> moves = new ArrayList<>();
-        moves.add(new Coord(position.x, position.y + direction));
+        if (position.y + direction >= 0 && position.y + direction <= 7)
+            moves.add(new Coord(position.x, position.y + direction));
         if (!this.hasMoved) {
             moves.add(new Coord(position.x, position.y + 2 * direction));
         }
