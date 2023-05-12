@@ -136,7 +136,7 @@ class Pawn extends ChessPiece {
         int newY = position.y + direction;
         moves = new ArrayList<>();
         if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7) {
-            if (squares[newY][newX].piece != null && squares[newY][newX].piece.color != this.color) {
+            if (virtualBoard[newY][newX] != null && virtualBoard[newY][newX].color != this.color) {
                 moves.add(new Coordinate(newX, newY));
                 allMoves.add(moves);
             }

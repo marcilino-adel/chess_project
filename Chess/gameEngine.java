@@ -48,11 +48,11 @@ public class gameEngine extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         if (customFont != null) {
-            blackTimer.setFont(customFont);
+            blackTimer.setFont(customFont.deriveFont(Font.BOLD, 24f));
         }
         blackTimer.setForeground(Color.white);
         if (customFont != null) {
-            whiteTimer.setFont(customFont);
+            whiteTimer.setFont(customFont.deriveFont(Font.BOLD, 24f));
         }
         whiteTimer.setForeground(Color.black);
 
@@ -130,10 +130,10 @@ public class gameEngine extends JFrame {
         informationPanel.add(deadWhitePanel);
 
         JPanel timersPanel = new JPanel(new GridLayout(2, 1));
+        timersPanel.setBorder(new EmptyBorder(2, 115, 7, 0));
         timersPanel.add(blackTimer);
         timersPanel.add(whiteTimer);
-        timersPanel.setOpaque(true);
-        timersPanel.setBackground(Color.darkGray);
+        timersPanel.setOpaque(false);
         informationPanel.add(timersPanel);
 
         informationPanel.add(deadBlackPanel);
@@ -150,14 +150,6 @@ public class gameEngine extends JFrame {
 
         add(layeredPane);
         setVisible(true);
-
-
-        // set up Promotion Panel
-
-
-
-        // set up End Game Panel
-
     }
 
     public static void movePiece(Coordinate initPos, Coordinate finalPos) {
