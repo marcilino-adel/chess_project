@@ -23,53 +23,55 @@ public class ChessSquare extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        setVirtualBoard();
+        if (gameRunning) {
+            setVirtualBoard();
 
-        // set the selected piece if the square selected contains a piece of the right color
-        if (selectedPiece == null) {
+            // set the selected piece if the square selected contains a piece of the right color
+            if (selectedPiece == null) {
+                if (this.piece != null && this.piece.color == currentPlayer) {
+                    selectedPiece = this.piece;
+                    legalMoves = selectedPiece.availableMoves();
+                    legalMoves = filterAvailableMovesByCheck(legalMoves);
+                    if (selectedPiece instanceof King) {
+                        legalMoves.add(((King) selectedPiece).castlingMoves());
+                    }
+                    gameEngine.colorAvailableMoves();
+                }
+                return;
+            }
             if (this.piece != null && this.piece.color == currentPlayer) {
                 selectedPiece = this.piece;
+                gameEngine.deColorAvailableMoves();
                 legalMoves = selectedPiece.availableMoves();
                 legalMoves = filterAvailableMovesByCheck(legalMoves);
                 if (selectedPiece instanceof King) {
                     legalMoves.add(((King) selectedPiece).castlingMoves());
                 }
                 gameEngine.colorAvailableMoves();
+                return;
             }
-            return;
-        }
-        if (this.piece != null && this.piece.color == currentPlayer) {
-            selectedPiece = this.piece;
-            gameEngine.deColorAvailableMoves();
-            legalMoves = selectedPiece.availableMoves();
-            legalMoves = filterAvailableMovesByCheck(legalMoves);
-            if (selectedPiece instanceof King) {
-                legalMoves.add(((King) selectedPiece).castlingMoves());
-            }
-            gameEngine.colorAvailableMoves();
-            return;
-        }
 
-        // we get here if a piece is already selected, so we
-        // search for this square in the selected piece's legal moves
-        boolean found = false;
-        for (int i = 0; i < legalMoves.size(); i++) {
-            if (found) break;
-            for (int j = 0; j < legalMoves.get(i).size(); j++) {
-                if (legalMoves.get(i).get(j).y == this.position.y && legalMoves.get(i).get(j).x == this.position.x) {
-                    // check if the move selected is the castle move
-                    isCastling = selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1;
-                    found = true;
-                    break;
+            // we get here if a piece is already selected, so we
+            // search for this square in the selected piece's legal moves
+            boolean found = false;
+            for (int i = 0; i < legalMoves.size(); i++) {
+                if (found) break;
+                for (int j = 0; j < legalMoves.get(i).size(); j++) {
+                    if (legalMoves.get(i).get(j).y == this.position.y && legalMoves.get(i).get(j).x == this.position.x) {
+                        // check if the move selected is the castle move
+                        isCastling = selectedPiece instanceof King && i == legalMoves.size() - 1 && j == legalMoves.get(i).size() - 1;
+                        found = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (!found) {
-            squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
-            return;
+            if (!found) {
+                squares[selectedPiece.position.y][selectedPiece.position.x].shakeButton();
+                return;
+            }
+            gameEngine.movePiece(selectedPiece.position, this.position);
         }
-        gameEngine.movePiece(selectedPiece.position, this.position);
     }
 
     private void shakeButton() {

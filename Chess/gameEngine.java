@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import static Chess.ChessPiece.filterAvailableMovesByCheck;
 
 public class gameEngine extends JFrame {
+    public static boolean gameRunning = true;
     public static boolean isCastling;
     public static final int CHECKMATE = 0;
     public static final int TIMEOUT = 1;
@@ -342,6 +343,7 @@ public class gameEngine extends JFrame {
     private static void stopEverything() {
         blackTimer.pause();
         whiteTimer.pause();
+        gameRunning = false;
 //        for (var row: squares) {
 //            for (var square: row) {
 //                square.setEnabled(false);
