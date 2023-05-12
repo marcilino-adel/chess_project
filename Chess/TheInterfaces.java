@@ -5,6 +5,7 @@ import org.json.simple.parser.JSONParser;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,27 +47,27 @@ public class TheInterfaces implements ActionListener {
         JLabel background2 = new JLabel(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/Background.jpg")).getScaledInstance(window.getWidth(), window.getHeight(), Image.SCALE_SMOOTH)));
         background2.setBounds(0, 0, 900, 700);
         layeredPane_for_users.add(background2, JLayeredPane.DEFAULT_LAYER);
-        JLabel namelabel1 = new JLabel();
-        namelabel1.setText("PLAYER USERNAME :");
-        namelabel1.setForeground(Color.black);
-        namelabel1.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel1.setBounds(170, 100, 290, 50);
-        namelabel1.setOpaque(false);
-        layeredPane_for_users.add(namelabel1, JLayeredPane.PALETTE_LAYER);
+        JLabel nameLabel = new JLabel();
+        nameLabel.setText("PLAYER USERNAME :");
+        nameLabel.setForeground(Color.black);
+        nameLabel.setFont(new Font("normal", Font.BOLD, 20));
+        nameLabel.setBounds(170, 100, 290, 50);
+        nameLabel.setOpaque(false);
+        layeredPane_for_users.add(nameLabel, JLayeredPane.PALETTE_LAYER);
         ////
-        JLabel namelabel2 = new JLabel();
-        namelabel2.setText("PASSWORD :");
-        namelabel2.setForeground(Color.black);
-        namelabel2.setFont(new Font("normal", Font.BOLD, 20));
-        namelabel2.setBounds(250, 200, 290, 50);
-        namelabel2.setOpaque(false);
-        layeredPane_for_users.add(namelabel2, JLayeredPane.PALETTE_LAYER);
+        JLabel passwordLabel = new JLabel();
+        passwordLabel.setText("PASSWORD :");
+        passwordLabel.setForeground(Color.black);
+        passwordLabel.setFont(new Font("normal", Font.BOLD, 20));
+        passwordLabel.setBounds(250, 200, 290, 50);
+        passwordLabel.setOpaque(false);
+        layeredPane_for_users.add(passwordLabel, JLayeredPane.PALETTE_LAYER);
 
 
         username = new JTextField();
         username.setBounds(400, 100, 230, 50);
         username.setFont(new Font("normal", Font.BOLD, 20));
-        username.setBorder(null);
+        username.setBorder(new LineBorder(Color.black, 5, true));
         username.setOpaque(false);
         username.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(username, JLayeredPane.PALETTE_LAYER);
@@ -74,7 +75,7 @@ public class TheInterfaces implements ActionListener {
         password=new JPasswordField();
         password.setBounds(400,200,230,50);
         password.setFont(new Font("normal", Font.BOLD, 20));
-        password.setBorder(null);
+        password.setBorder(new LineBorder(Color.black, 5, true));
         password.setOpaque(false);
         password.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(password, JLayeredPane.PALETTE_LAYER);
