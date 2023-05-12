@@ -72,35 +72,36 @@ public class gameEngine extends JFrame {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 squares[row][col] = new ChessSquare(col, row);
+                squares[row][col].setBackground(new Color(1, 1, 1,0));
                 squares[row][col].setBorder(null);
                 squares[row][col].setOpaque(false);
                 playingBoard.add(squares[row][col]);
                if (row == 1)
-                   squares[row][col].piece=new Pawn(Color.black,col,row);
+                   squares[row][col].piece = new Pawn(Color.black, col, row);
                else if (row == 6) {
-                   squares[row][col].piece=new Pawn(Color.white,col,row);
+                   squares[row][col].piece = new Pawn(Color.white, col, row);
                }
                else if(row == 0 && (col == 0 || col == 7))
-                   squares[row][col].piece=new Rook(Color.black,col,row);
+                   squares[row][col].piece = new Rook(Color.black, col, row);
                else if (row == 0 && (col == 1 || col == 6))
-                   squares[row][col].piece=new Knight(Color.black,col,row);
+                   squares[row][col].piece = new Knight(Color.black, col, row);
                else if(row == 0 && (col == 2 || col == 5))
-                   squares[row][col].piece=new Bishop(Color.black,col,row);
+                   squares[row][col].piece = new Bishop(Color.black, col, row);
                else if(row == 0 && col == 4)
-                   squares[row][col].piece=new King(Color.black,col,row);
+                   squares[row][col].piece = new King(Color.black, col, row);
                else if(row == 0)
-                   squares[row][col].piece=new Queen(Color.black,col,row);
+                   squares[row][col].piece = new Queen(Color.black, col, row);
                // Set the second half
                else if(row == 7 && (col == 0 || col == 7))
-                   squares[row][col].piece=new Rook(Color.white,col,row);
+                   squares[row][col].piece = new Rook(Color.white, col, row);
                else if(row == 7 && (col == 1 || col == 6))
-                       squares[row][col].piece=new Knight(Color.white,col,row);
+                       squares[row][col].piece = new Knight(Color.white, col, row);
                else if(row == 7 && (col == 2 || col == 5))
-                   squares[row][col].piece=new Bishop(Color.white,col,row);
+                   squares[row][col].piece = new Bishop(Color.white, col, row);
                else if(row == 7 && col == 4)
-                   squares[row][col].piece=new King(Color.white,col,row);
+                   squares[row][col].piece = new King(Color.white, col, row);
                else if(row == 7)
-                   squares[row][col].piece=new Queen(Color.white,col,row);
+                   squares[row][col].piece = new Queen(Color.white, col, row);
 
             }
         }
@@ -112,7 +113,7 @@ public class gameEngine extends JFrame {
         // initialize information panel
         informationPanel = new JPanel(new GridLayout(3, 1, 20, 30));
         informationPanel.setPreferredSize(new Dimension(300, getHeight()));
-        informationPanel.setBorder(new EmptyBorder(74, 0, 74, 0));
+        informationPanel.setBorder(new EmptyBorder(81, 0, 74, 0));
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 5; col++) {
@@ -139,8 +140,6 @@ public class gameEngine extends JFrame {
 
         informationPanel.setOpaque(false);
 
-//        informationPanel.setBackground(Color.blue);
-//        informationPanel.setOpaque(true);
 
         JPanel bothPanels = new JPanel(new BorderLayout(28, 0));
         bothPanels.setBounds(0, 0, getWidth(), getHeight());

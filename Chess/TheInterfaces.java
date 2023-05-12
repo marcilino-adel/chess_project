@@ -66,6 +66,7 @@ public class TheInterfaces implements ActionListener {
         username = new JTextField();
         username.setBounds(400, 100, 230, 50);
         username.setFont(new Font("normal", Font.BOLD, 20));
+        username.setBorder(null);
         username.setOpaque(false);
         username.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(username, JLayeredPane.PALETTE_LAYER);
@@ -73,11 +74,10 @@ public class TheInterfaces implements ActionListener {
         password=new JPasswordField();
         password.setBounds(400,200,230,50);
         password.setFont(new Font("normal", Font.BOLD, 20));
+        password.setBorder(null);
         password.setOpaque(false);
         password.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(password, JLayeredPane.PALETTE_LAYER);
-
-
 
 
 
