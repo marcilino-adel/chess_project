@@ -48,10 +48,10 @@ public class TheInterfaces implements ActionListener {
         background2.setBounds(0, 0, 900, 700);
         layeredPane_for_users.add(background2, JLayeredPane.DEFAULT_LAYER);
         JLabel nameLabel = new JLabel();
-        nameLabel.setText("PLAYER USERNAME :");
+        nameLabel.setText("USERNAME :");
         nameLabel.setForeground(Color.black);
         nameLabel.setFont(new Font("normal", Font.BOLD, 20));
-        nameLabel.setBounds(170, 100, 290, 50);
+        nameLabel.setBounds(250, 100, 290, 50);
         nameLabel.setOpaque(false);
         layeredPane_for_users.add(nameLabel, JLayeredPane.PALETTE_LAYER);
         ////
@@ -72,7 +72,7 @@ public class TheInterfaces implements ActionListener {
         username.setHorizontalAlignment(JTextField.CENTER);
         layeredPane_for_users.add(username, JLayeredPane.PALETTE_LAYER);
 
-        password=new JPasswordField();
+        password = new JPasswordField();
         password.setBounds(400,200,230,50);
         password.setFont(new Font("normal", Font.BOLD, 20));
         password.setBorder(new LineBorder(Color.black, 5, true));
@@ -83,12 +83,10 @@ public class TheInterfaces implements ActionListener {
 
 
         start = new JButton();
-        start.setText("START");
-        start.setFont(new Font("comic sans", Font.BOLD, 20));
+        start.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/startBtn.png")).getScaledInstance(96, 43, Image.SCALE_SMOOTH)));
         start.setFocusable(false);
-//        rapid.setForeground(Color.white);
         start.setForeground(Color.white);
-        start.setBackground(new Color(75, 41, 2, 255));
+        start.setBackground(new Color(75, 41, 2, 0));
         start.setBounds(390, 320, 100, 50);
         start.addActionListener(new TheInterfaces());
         layeredPane_for_users.add(start, JLayeredPane.PALETTE_LAYER);
@@ -117,11 +115,10 @@ public class TheInterfaces implements ActionListener {
         layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
 
         // set the buttons
-        rapid.setText("Rapid");
-        rapid.setFont(new Font("comic sans", Font.BOLD, 20));
+        rapid.setIcon(new ImageIcon(ImageIO.read(new File("Chess/Media/Icons/rapidBtn.png")).getScaledInstance(96, 43, Image.SCALE_SMOOTH)));
         rapid.setFocusable(false);
         rapid.setForeground(Color.white);
-        rapid.setBackground(new Color(75, 41, 2, 255));
+        rapid.setBackground(new Color(75, 41, 2, 0));
         rapid.setBounds(385, 200, 100, 50);
         rapid.addActionListener(new TheInterfaces());
         layeredPane.add(rapid, JLayeredPane.PALETTE_LAYER);
