@@ -29,10 +29,17 @@ public class gameEngine extends JFrame {
     private static final JLabel[][] deadWhiteLabels = new JLabel[3][5];
     private static final JLabel[][] deadBlackLabels = new JLabel[3][5];
     private static final JLayeredPane layeredPane = new JLayeredPane();
+    private static final JPanel promotionPanel = new JPanel();
+    private static final JPanel endGamePanel = new JPanel();
     public static ChessSquare[][] squares = new ChessSquare[BOARD_SIZE][BOARD_SIZE];
     public static ChessPiece[][] virtualBoard = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
     public gameEngine() {
+        Font customFont = null;
+        try {
+            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Chess/Media/Font/Kitami.ttf"));
+        } catch (Exception ignored) {}
+
         setTitle("Chess Game");
         setResizable(false);
         setLayout(null);
@@ -40,7 +47,13 @@ public class gameEngine extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        if (customFont != null) {
+            blackTimer.setFont(customFont);
+        }
         blackTimer.setForeground(Color.white);
+        if (customFont != null) {
+            whiteTimer.setFont(customFont);
+        }
         whiteTimer.setForeground(Color.black);
 
         JLabel background = new JLabel();
@@ -51,7 +64,6 @@ public class gameEngine extends JFrame {
 
         layeredPane.setBounds(0, -15, getWidth(), getHeight());
         layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.setBackground(Color.red);
 
         GridLayout layout = new GridLayout(BOARD_SIZE, BOARD_SIZE);
         playingBoard = new JPanel(layout);
@@ -60,12 +72,7 @@ public class gameEngine extends JFrame {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 squares[row][col] = new ChessSquare(col, row);
-//                if ((row + col) % 2 != 0) {
-//                    squares[row][col].setBackground(Color.black);
-//                } else {
-//                    squares[row][col].setBackground(Color.white);
-//                }
-                squares[row][col].setBackground(new Color(2, 2, 2));
+                squares[row][col].setBorder(null);
                 squares[row][col].setOpaque(false);
                 playingBoard.add(squares[row][col]);
                if (row == 1)
@@ -101,8 +108,11 @@ public class gameEngine extends JFrame {
         playingBoard.setOpaque(false);
         playingBoard.setBorder(new EmptyBorder(66, 50, 64, 0));
 
+
         // initialize information panel
-        informationPanel = new JPanel(new GridLayout(6, 1));
+        informationPanel = new JPanel(new GridLayout(3, 1, 20, 30));
+        informationPanel.setPreferredSize(new Dimension(300, getHeight()));
+        informationPanel.setBorder(new EmptyBorder(74, 0, 74, 0));
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 5; col++) {
@@ -112,11 +122,25 @@ public class gameEngine extends JFrame {
                 deadBlackPanel.add(deadBlackLabels[row][col]);
             }
         }
+
+        deadWhitePanel.setOpaque(false);
+        deadBlackPanel.setOpaque(false);
+
         informationPanel.add(deadWhitePanel);
-        informationPanel.add(blackTimer);
-        informationPanel.add(whiteTimer);
+
+        JPanel timersPanel = new JPanel(new GridLayout(2, 1));
+        timersPanel.add(blackTimer);
+        timersPanel.add(whiteTimer);
+        timersPanel.setOpaque(true);
+        timersPanel.setBackground(Color.darkGray);
+        informationPanel.add(timersPanel);
+
         informationPanel.add(deadBlackPanel);
+
         informationPanel.setOpaque(false);
+
+//        informationPanel.setBackground(Color.blue);
+//        informationPanel.setOpaque(true);
 
         JPanel bothPanels = new JPanel(new BorderLayout(28, 0));
         bothPanels.setBounds(0, 0, getWidth(), getHeight());
@@ -125,9 +149,16 @@ public class gameEngine extends JFrame {
         bothPanels.setOpaque(false);
         layeredPane.add(bothPanels, JLayeredPane.PALETTE_LAYER);
 
-        playingBoard.setSize(600, 600);
         add(layeredPane);
         setVisible(true);
+
+
+        // set up Promotion Panel
+
+
+
+        // set up End Game Panel
+
     }
 
     public static void movePiece(Coordinate initPos, Coordinate finalPos) {
@@ -175,9 +206,9 @@ public class gameEngine extends JFrame {
     public static void colorAvailableMoves() {
         for (var moveList: legalMoves) {
             for (Coordinate move : moveList) {
-                squares[move.y][move.x].setBorder(new LineBorder(Color.green, 2, true));
+                squares[move.y][move.x].setBorder(new LineBorder(Color.green, 7));
                 if (squares[move.y][move.x].piece != null && squares[move.y][move.x].piece.color == currentPlayer) {
-                    squares[move.y][move.x].setBorder(new LineBorder(Color.red, 2, true));
+                    squares[move.y][move.x].setBorder(new LineBorder(Color.red, 7));
                 }
             }
         }
@@ -188,7 +219,6 @@ public class gameEngine extends JFrame {
     public static void deColorAvailableMoves() {
         for (var moveList: legalMoves) {
             for (Coordinate move : moveList) {
-//                squares[move.y][move.x].setBackground((move.y + move.x) % 2 != 0 ? Color.black : Color.white);
                 squares[move.y][move.x].setBorder(null);
             }
         }
@@ -197,19 +227,18 @@ public class gameEngine extends JFrame {
 
     private static void killPiece(Coordinate finalPos) {
         boolean found = false;
-        Image icon = squares[finalPos.y][finalPos.x].piece.getPieceIcon().getImage();
-        Image resizedIcon = icon.getScaledInstance(20, 30, Image.SCALE_SMOOTH);
+        ImageIcon icon = squares[finalPos.y][finalPos.x].piece.getPieceIcon();
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 5; col++) {
                 if (currentPlayer == Color.white) {
                     if (deadBlackLabels[2 - row][col].getIcon() == null) {
-                        deadBlackLabels[2 - row][col].setIcon(new ImageIcon(resizedIcon));
+                        deadBlackLabels[2 - row][col].setIcon(icon);
                         found = true;
                         break;
                     }
                 } else {
                     if (deadWhiteLabels[row][col].getIcon() == null) {
-                        deadWhiteLabels[row][col].setIcon(new ImageIcon(resizedIcon));
+                        deadWhiteLabels[row][col].setIcon(icon);
                         found = true;
                         break;
                     }
@@ -322,11 +351,11 @@ public class gameEngine extends JFrame {
     private static void stopEverything() {
         blackTimer.pause();
         whiteTimer.pause();
-        for (var row: squares) {
-            for (var square: row) {
-                square.setEnabled(false);
-            }
-        }
+//        for (var row: squares) {
+//            for (var square: row) {
+//                square.setEnabled(false);
+//            }
+//        }
     }
 
     private static void castle(Coordinate initPos, Coordinate finalPos) {

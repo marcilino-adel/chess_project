@@ -25,21 +25,22 @@ public class MyTimer extends JLabel {
     }
 
     private void setTime() {
-        if (timeSet != null) {
-            int minutes = Integer.parseInt(timeSet);
-            millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
-            return;
-        }
-        String input = JOptionPane.showInputDialog(null, "Enter time allowed for each player :", "Set Timer", JOptionPane.QUESTION_MESSAGE);
-        try {
-            int minutes = Integer.parseInt(input);
-            timeSet = input;
-            millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid input. Using default time: 3 minutes.");
-            timeSet = "3";
-            millisRemaining = TimeUnit.MINUTES.toMillis(3);
-        }
+//        if (timeSet != null) {
+//            int minutes = Integer.parseInt(timeSet);
+//            millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
+//            return;
+//        }
+//        String input = JOptionPane.showInputDialog(null, "Enter time allowed for each player :", "Set Timer", JOptionPane.QUESTION_MESSAGE);
+//        try {
+//            int minutes = Integer.parseInt(input);
+//            timeSet = input;
+//            millisRemaining = TimeUnit.MINUTES.toMillis(minutes);
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(null, "Invalid input. Using default time: 3 minutes.");
+//            timeSet = "3";
+//            millisRemaining = TimeUnit.MINUTES.toMillis(3);
+//        }
+        millisRemaining = TimeUnit.MINUTES.toMillis(5);
     }
 
     public void pause() {
