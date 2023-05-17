@@ -49,5 +49,7 @@ early 19th century, and we plan on leaving it that way). We want to add:
   + This implies the use of complex algorithms to set the difficulty level of the computer. 
 + CrazyHouse game mode:
   + This is a game mode were captured pieces can be brought back by the player that made the capturing.
++ Stockfish Implementation:
+  + We want to add the Stockfish API, to further enhance our game
 
 
